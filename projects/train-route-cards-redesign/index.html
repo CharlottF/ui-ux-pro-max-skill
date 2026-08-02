@@ -69,8 +69,13 @@
   .idrow{display:flex; align-items:center; gap:6px;}
   .tagnum{display:inline-flex; align-items:center; height:22px; padding:0 10px; border-radius:7px; background:var(--navy); color:var(--navy-ink); font-size:12px; font-weight:800; font-variant-numeric:tabular-nums; flex:0 0 auto;}
   .tagsvc{display:inline-flex; align-items:center; height:22px; padding:0 9px; border-radius:7px; background:var(--orange-bg); color:var(--orange); font-size:11px; font-weight:800; flex:0 0 auto;}
-  .xchg{color:var(--ink-faint); flex:0 0 auto; display:flex;}
   .routecap{margin-left:auto; font-size:11.5px; font-weight:600; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:right; padding-left:8px;}
+
+  /* ---------- пересадка: іконка виду транспорту окремо, потім бейдж коду поруч ---------- */
+  .legs{display:flex; align-items:center; gap:9px; flex-wrap:nowrap; min-width:0;}
+  .legunit{display:inline-flex; align-items:center; gap:4px; flex:0 0 auto;}
+  .legunit .picto{color:var(--ink-faint); flex:0 0 auto; display:flex;}
+  .legunit .badge{display:inline-flex; align-items:center; height:22px; padding:0 9px; border-radius:7px; background:var(--navy); color:var(--navy-ink); font-size:11.5px; font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap;}
 
   /* ---------- час / дата / місто ---------- */
   .timerow{display:flex; align-items:flex-start; margin-top:13px;}
@@ -91,13 +96,6 @@
   }
   .connector .durpill svg{opacity:.75;}
   .connector .stop{position:absolute; top:13px; width:6px;height:6px;border-radius:50%; background:var(--orange); border:1.6px solid var(--surface); transform:translate(-50%,-50%);}
-  .connector .legicon{
-    position:absolute; top:13px; width:17px; height:17px; border-radius:50%;
-    background:var(--surface); border:1.5px solid var(--line); color:var(--ink-muted);
-    display:flex; align-items:center; justify-content:center;
-    transform:translate(-50%,-50%);
-  }
-  .connector .legicon svg{opacity:1;}
 
   /* ---------- бульбашка ціни — тихіша за час/дату/місто; грід під 1-4 класи ---------- */
   .pricerow{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:13px;}
@@ -126,8 +124,8 @@
 <div class="stage">
   <div class="intro">
     <p class="eyebrow">Redesign · фінальний напрям</p>
-    <h1>«Платформа» — вид транспорту тепер на самій лінії маршруту</h1>
-    <p>Кольорова смуга-статус зверху, пунктирний конектор з піґулкою тривалості, час/дата/місто в пріоритеті, ціна тихо в бульбашці. Номери етапів — знову прості пігулки зі стрілочкою, без іконок усередині. Замість цього, як у Google Maps і Rome2Rio, маленькі іконки виду транспорту сидять прямо на пунктирній лінії між зупинками — тільки там, де види й справді різні (потяг → автобус). Для однотипних пересадок (потяг → потяг) лінія лишається чистою, лише з крапкою в місці пересадки.</p>
+    <h1>«Платформа» — іконка виду транспорту поруч з кодом, за знайденим референсом</h1>
+    <p>Кольорова смуга-статус зверху, пунктирний конектор з піґулкою тривалості, час/дата/місто в пріоритеті, ціна тихо в бульбашці. Номери етапів пересадки тепер за принципом «іконка виду транспорту, а поруч — кольоровий бейдж коду», без стрілочки між ними — саме так, як у знайденому референсі (потяг-іконка + IC/KW/EIC). Кожен етап — окрема пара іконка+бейдж, кілька пар підряд читаються як один ланцюжок.</p>
   </div>
 
   <div class="phone-shell">
@@ -222,7 +220,13 @@
         <!-- пересадка, 1: потяг + потяг -->
         <div class="card">
           <div class="body no-strip">
-            <div class="idrow"><span class="tagnum">754П</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">043П</span><span class="routecap">2 потяги</span></div>
+            <div class="idrow">
+              <span class="legs">
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">754П</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">043П</span></span>
+              </span>
+              <span class="routecap">2 потяги</span>
+            </div>
             <div class="timerow">
               <div class="tblock"><div class="t">07:20</div><div class="d">3 Серп</div><div class="c">Одеса</div></div>
               <div class="connector"><div class="track"></div><span class="stop" style="left:34%;"></span><span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>14 год 43 хв</span></div>
@@ -238,7 +242,14 @@
         <!-- пересадка, 2: 3 потяги -->
         <div class="card">
           <div class="body no-strip">
-            <div class="idrow"><span class="tagnum">754П</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">910Л</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">043П</span><span class="routecap">3 потяги</span></div>
+            <div class="idrow">
+              <span class="legs">
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">754П</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">910Л</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">043П</span></span>
+              </span>
+              <span class="routecap">3 потяги</span>
+            </div>
             <div class="timerow">
               <div class="tblock"><div class="t">07:20</div><div class="d">3 Серп</div><div class="c">Одеса</div></div>
               <div class="connector"><div class="track"></div><span class="stop" style="left:28%;"></span><span class="stop" style="left:64%;"></span><span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>17 год 20 хв</span></div>
@@ -254,15 +265,16 @@
         <!-- пересадка, 3: потяг та автобус -->
         <div class="card">
           <div class="body no-strip">
-            <div class="idrow"><span class="tagnum">754П</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">№14</span><span class="routecap">потяг та автобус</span></div>
+            <div class="idrow">
+              <span class="legs">
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">754П</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 16V7a2 2 0 012-2h12a2 2 0 012 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="4" y="7" width="16" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M4 13h16" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="18.5" r="1.4" fill="currentColor"/><circle cx="16" cy="18.5" r="1.4" fill="currentColor"/></svg><span class="badge">№14</span></span>
+              </span>
+              <span class="routecap">потяг та автобус</span>
+            </div>
             <div class="timerow">
               <div class="tblock"><div class="t">08:10</div><div class="d">3 Серп</div><div class="c">Одеса</div></div>
-              <div class="connector">
-                <div class="track"></div>
-                <span class="legicon" style="left:12%;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="2"/><path d="M5 11h14" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="20" r="1.4" fill="currentColor"/><circle cx="15.5" cy="20" r="1.4" fill="currentColor"/></svg></span>
-                <span class="legicon" style="left:88%;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M4 16V7a2 2 0 012-2h12a2 2 0 012 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="7" width="16" height="9" rx="1.5" stroke="currentColor" stroke-width="2"/><path d="M4 13h16" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="18.5" r="1.5" fill="currentColor"/><circle cx="16" cy="18.5" r="1.5" fill="currentColor"/></svg></span>
-                <span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>11 год 05 хв</span>
-              </div>
+              <div class="connector"><div class="track"></div><span class="stop" style="left:46%;"></span><span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>11 год 05 хв</span></div>
               <div class="tblock end"><div class="t">19:15</div><div class="d">3 Серп</div><div class="c">Київ</div></div>
             </div>
             <div class="trrow">
@@ -275,16 +287,17 @@
         <!-- пересадка, 4: потяг + автобус + приміська -->
         <div class="card">
           <div class="body no-strip">
-            <div class="idrow"><span class="tagnum">117К</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">№7</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">ЕР-4</span><span class="routecap">3 етапи</span></div>
+            <div class="idrow">
+              <span class="legs">
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 11h14" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="20" r="1.3" fill="currentColor"/><circle cx="15.5" cy="20" r="1.3" fill="currentColor"/></svg><span class="badge">117К</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 16V7a2 2 0 012-2h12a2 2 0 012 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="4" y="7" width="16" height="9" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M4 13h16" stroke="currentColor" stroke-width="1.8"/><circle cx="8" cy="18.5" r="1.4" fill="currentColor"/><circle cx="16" cy="18.5" r="1.4" fill="currentColor"/></svg><span class="badge">№7</span></span>
+                <span class="legunit"><svg class="picto" width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="8" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M5 12.5h14" stroke="currentColor" stroke-width="1.8"/><path d="M12 8V4M9.5 4h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8.5" cy="20.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="20.5" r="1.2" fill="currentColor"/></svg><span class="badge">ЕР-4</span></span>
+              </span>
+              <span class="routecap">3 етапи</span>
+            </div>
             <div class="timerow">
               <div class="tblock"><div class="t">05:50</div><div class="d">3 Серп</div><div class="c">Одеса</div></div>
-              <div class="connector" style="padding-bottom:18px;">
-                <div class="track"></div>
-                <span class="legicon" style="left:16%; top:27px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="2"/><path d="M5 11h14" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="20" r="1.4" fill="currentColor"/><circle cx="15.5" cy="20" r="1.4" fill="currentColor"/></svg></span>
-                <span class="legicon" style="left:50%; top:27px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M4 16V7a2 2 0 012-2h12a2 2 0 012 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="7" width="16" height="9" rx="1.5" stroke="currentColor" stroke-width="2"/><path d="M4 13h16" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="18.5" r="1.5" fill="currentColor"/><circle cx="16" cy="18.5" r="1.5" fill="currentColor"/></svg></span>
-                <span class="legicon" style="left:84%; top:27px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><rect x="5" y="8" width="14" height="10" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M5 12.5h14" stroke="currentColor" stroke-width="2"/><path d="M12 8V4M9.5 4h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8.5" cy="20.5" r="1.4" fill="currentColor"/><circle cx="15.5" cy="20.5" r="1.4" fill="currentColor"/></svg></span>
-                <span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>15 год 10 хв</span>
-              </div>
+              <div class="connector"><div class="track"></div><span class="stop" style="left:32%;"></span><span class="stop" style="left:68%;"></span><span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>15 год 10 хв</span></div>
               <div class="tblock end"><div class="t">21:00</div><div class="d">3 Серп</div><div class="c">Київ</div></div>
             </div>
             <div class="trrow">
