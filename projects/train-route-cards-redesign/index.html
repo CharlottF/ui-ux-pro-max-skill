@@ -1,0 +1,871 @@
+<!doctype html>
+<title>Картки маршрутів — редизайн</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --bg:#EEF1F8;
+    --page-ink:#151B33;
+    --page-ink-soft:#5C6488;
+    --surface:#FFFFFF;
+    --ink:#151B33;
+    --ink-muted:#6B7290;
+    --ink-faint:#9BA1C0;
+    --navy:#1E2A66;
+    --navy-ink:#EDEFFB;
+    --orange:#E8871E;
+    --orange-bg:#FCEBD6;
+    --cheap:#12946F;
+    --cheap-bg:#DEF3EA;
+    --fast:#6C4CD8;
+    --fast-bg:#EBE5FC;
+    --transfer:#C9761A;
+    --transfer-bg:#FBF0DE;
+    --bubble:#F1F3F9;
+    --line:#E4E8F3;
+    --shadow: 0 1px 2px rgba(21,27,51,.04), 0 8px 20px -12px rgba(21,27,51,.18);
+    --device-frame:#0E1424;
+    --status-fg:#FFFFFF;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0B0F1E;
+      --page-ink:#EDEFFB;
+      --page-ink-soft:#9096B8;
+      --surface:#151B33;
+      --ink:#EDEFFB;
+      --ink-muted:#9096B8;
+      --ink-faint:#666D91;
+      --navy:#3A54D6;
+      --navy-ink:#F2F4FF;
+      --orange:#F0A24E;
+      --orange-bg:#3A2A14;
+      --cheap:#3FD9AA;
+      --cheap-bg:#0F3B30;
+      --fast:#A692FF;
+      --fast-bg:#2A2258;
+      --transfer:#F0B15C;
+      --transfer-bg:#3A2C12;
+      --bubble:#1D2440;
+      --line:#2A3157;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 24px -14px rgba(0,0,0,.6);
+      --device-frame:#000000;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0B0F1E; --page-ink:#EDEFFB; --page-ink-soft:#9096B8; --surface:#151B33; --ink:#EDEFFB;
+    --ink-muted:#9096B8; --ink-faint:#666D91; --navy:#3A54D6; --navy-ink:#F2F4FF; --orange:#F0A24E;
+    --orange-bg:#3A2A14; --cheap:#3FD9AA; --cheap-bg:#0F3B30; --fast:#A692FF; --fast-bg:#2A2258;
+    --transfer:#F0B15C; --transfer-bg:#3A2C12; --bubble:#1D2440; --line:#2A3157;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 24px -14px rgba(0,0,0,.6); --device-frame:#000000;
+  }
+  :root[data-theme="light"]{
+    --bg:#EEF1F8; --page-ink:#151B33; --page-ink-soft:#5C6488; --surface:#FFFFFF; --ink:#151B33;
+    --ink-muted:#6B7290; --ink-faint:#9BA1C0; --navy:#1E2A66; --navy-ink:#EDEFFB; --orange:#E8871E;
+    --orange-bg:#FCEBD6; --cheap:#12946F; --cheap-bg:#DEF3EA; --fast:#6C4CD8; --fast-bg:#EBE5FC;
+    --transfer:#C9761A; --transfer-bg:#FBF0DE; --bubble:#F1F3F9; --line:#E4E8F3;
+    --shadow: 0 1px 2px rgba(21,27,51,.04), 0 8px 20px -12px rgba(21,27,51,.18); --device-frame:#0E1424;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--page-ink);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .stage{
+    max-width:1180px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  .intro{
+    max-width:640px;
+    margin-bottom:36px;
+  }
+  .eyebrow{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--orange);
+    margin:0 0 10px;
+  }
+  .intro h1{
+    font-size:26px;
+    font-weight:800;
+    line-height:1.25;
+    letter-spacing:-.01em;
+    margin:0 0 10px;
+    text-wrap:balance;
+  }
+  .intro p{
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--page-ink-soft);
+    margin:0;
+  }
+
+  .layout{
+    display:flex;
+    gap:44px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  /* ---------- phone shell ---------- */
+  .phone-shell{
+    flex:0 0 auto;
+    width:398px;
+    padding:12px;
+    background:var(--device-frame);
+    border-radius:52px;
+    box-shadow:0 30px 60px -25px rgba(10,14,30,.45);
+  }
+  .screen{
+    position:relative;
+    width:100%;
+    height:824px;
+    background:var(--bg);
+    border-radius:40px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    position:absolute;
+    top:10px; left:50%; transform:translateX(-50%);
+    width:120px; height:26px;
+    background:var(--device-frame);
+    border-radius:14px;
+    z-index:20;
+  }
+  .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:16px 26px 4px;
+    font-size:14px; font-weight:700;
+    color:var(--navy-ink);
+    background:var(--navy);
+  }
+  .statusbar .icons{display:flex; align-items:center; gap:5px;}
+
+  .app-header{
+    background:var(--navy);
+    color:var(--navy-ink);
+    padding:6px 20px 18px;
+  }
+  .app-header .top{
+    display:flex; align-items:center; gap:12px;
+  }
+  .app-header .back{
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.08);
+    flex:0 0 auto;
+  }
+  .app-header .titles{flex:1; min-width:0; text-align:center;}
+  .app-header .route-title{
+    font-size:16px; font-weight:800; letter-spacing:-.01em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .app-header .route-date{
+    font-size:12.5px; color:#AEB6E8; margin-top:2px; font-weight:600;
+  }
+  .app-header .info{
+    width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.08);
+    flex:0 0 auto;
+  }
+
+  .date-tabs{
+    background:var(--surface);
+    display:flex;
+    padding:14px 14px 12px;
+    gap:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .date-tab{
+    flex:1;
+    text-align:center;
+    padding:8px 4px;
+    border-radius:12px;
+    border:1.5px solid transparent;
+  }
+  .date-tab .d{font-size:14px; font-weight:800; color:var(--ink);}
+  .date-tab .w{font-size:10.5px; color:var(--ink-faint); font-weight:600; margin-top:1px;}
+  .date-tab.active{border-color:var(--navy);}
+  .date-tab.active .d{color:var(--navy);}
+
+  .filters{
+    background:var(--bg);
+    display:flex;
+    gap:8px;
+    padding:12px 14px;
+    align-items:center;
+  }
+  .chip-round{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);
+    flex:0 0 auto;
+    color:var(--ink-muted);
+  }
+  .chip-pill{
+    height:36px;
+    border-radius:18px;
+    background:var(--surface);
+    display:flex;align-items:center;gap:6px;
+    padding:0 14px;
+    box-shadow:var(--shadow);
+    font-size:12.5px; font-weight:700; color:var(--ink-muted);
+    white-space:nowrap;
+  }
+  .chip-pill.active{background:var(--navy); color:var(--navy-ink);}
+  .chip-pill svg{flex:0 0 auto;}
+
+  .list{
+    flex:1;
+    overflow-y:auto;
+    padding:6px 14px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    scrollbar-width:none;
+  }
+  .list::-webkit-scrollbar{display:none;}
+
+  /* ---------- card ---------- */
+  .card{
+    position:relative;
+    background:var(--surface);
+    border-radius:18px;
+    padding:13px 14px 12px;
+    box-shadow:var(--shadow);
+  }
+  .id-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .tag-number{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    height:22px;
+    padding:0 11px 0 9px;
+    background:var(--navy);
+    color:var(--navy-ink);
+    font-size:12.5px;
+    font-weight:800;
+    letter-spacing:.01em;
+    font-variant-numeric:tabular-nums;
+    clip-path:polygon(0 0,100% 0,88% 100%,0 100%);
+    flex:0 0 auto;
+  }
+  .tag-service{
+    display:inline-flex;
+    align-items:center;
+    height:22px;
+    padding:0 9px;
+    border-radius:7px;
+    background:var(--orange-bg);
+    color:var(--orange);
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:.02em;
+    flex:0 0 auto;
+  }
+  .interchange-icon{
+    color:var(--ink-faint);
+    flex:0 0 auto;
+    display:flex;
+  }
+  .route-caption{
+    margin-left:auto;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:right;
+    padding-left:8px;
+  }
+
+  .status-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    height:20px;
+    padding:0 8px 0 6px;
+    border-radius:6px;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.01em;
+    margin-top:7px;
+  }
+  .status-chip.cheap{background:var(--cheap-bg); color:var(--cheap);}
+  .status-chip.fast{background:var(--fast-bg); color:var(--fast);}
+  .status-chip svg{flex:0 0 auto;}
+
+  .time-row{
+    display:flex;
+    align-items:flex-start;
+    margin-top:12px;
+  }
+  .time-block{width:78px;}
+  .time-block.end{width:78px; text-align:right;}
+  .time-block .t{
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+    line-height:1;
+  }
+  .time-block .d{
+    font-size:11px;
+    color:var(--ink-faint);
+    font-weight:600;
+    margin-top:5px;
+  }
+  .time-block .c{
+    font-size:12.5px;
+    color:var(--ink);
+    font-weight:700;
+    margin-top:1px;
+  }
+
+  .duration-col{
+    flex:1;
+    padding-top:3px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:0;
+  }
+  .duration-label{
+    font-size:11px;
+    font-weight:700;
+    color:var(--ink-muted);
+    margin-bottom:6px;
+    white-space:nowrap;
+  }
+  .duration-track{
+    position:relative;
+    width:100%;
+    height:2px;
+    background:var(--line);
+    border-radius:2px;
+  }
+  .duration-track::before,
+  .duration-track::after{
+    content:"";
+    position:absolute;
+    top:50%; transform:translateY(-50%);
+    width:7px;height:7px;
+    border-radius:50%;
+  }
+  .duration-track::before{
+    left:-2px;
+    background:var(--surface);
+    border:2px solid var(--dot-color, var(--navy));
+  }
+  .duration-track::after{
+    right:-2px;
+    background:var(--dot-color, var(--navy));
+  }
+  .duration-track .transfer-mark{
+    position:absolute;
+    top:50%;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--transfer);
+    border:2px solid var(--surface);
+    transform:translate(-50%,-50%);
+  }
+  .card.cheap .duration-track{--dot-color:var(--cheap);}
+  .card.fast .duration-track{--dot-color:var(--fast);}
+  .card.transfer .duration-track{--dot-color:var(--transfer);}
+
+  .price-row{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .price-row::-webkit-scrollbar{display:none;}
+  .price-bubble{
+    flex:1 1 0;
+    min-width:118px;
+    background:var(--bubble);
+    border-radius:13px;
+    padding:8px 12px 9px;
+    text-align:center;
+  }
+  .price-bubble .cls{
+    font-size:11px;
+    color:var(--ink-muted);
+    font-weight:600;
+  }
+  .price-bubble .amt{
+    font-size:17px;
+    font-weight:800;
+    color:var(--ink);
+    margin-top:2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .price-bubble .amt sup{
+    font-size:12px;
+    font-weight:700;
+    margin-left:1px;
+    color:var(--ink-muted);
+  }
+
+  .transfer-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:12px;
+    padding-top:11px;
+    border-top:1px solid var(--line);
+  }
+  .transfer-info{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+  }
+  .transfer-info .dot-icon{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--transfer-bg);
+    color:var(--transfer);
+    display:flex;align-items:center;justify-content:center;
+    flex:0 0 auto;
+  }
+  .transfer-info .txt .l1{font-size:12.5px; font-weight:700; color:var(--ink);}
+  .transfer-info .txt .l2{font-size:11.5px; color:var(--ink-muted); font-weight:600; margin-top:1px;}
+  .transfer-price{
+    font-size:14.5px;
+    font-weight:800;
+    color:var(--transfer);
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .transfer-price span{font-weight:600; font-size:12px;}
+
+  .chevron{
+    position:absolute;
+    right:12px; top:13px;
+    color:var(--ink-faint);
+    opacity:.55;
+  }
+
+  /* ---------- notes ---------- */
+  .notes{
+    flex:1 1 380px;
+    min-width:300px;
+    padding-top:4px;
+  }
+  .notes h2{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 16px;
+  }
+  .note{
+    display:flex;
+    gap:12px;
+    padding:16px 0;
+    border-top:1px solid var(--line);
+  }
+  .note:first-of-type{border-top:none; padding-top:0;}
+  .note .num{
+    flex:0 0 auto;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--bubble);
+    color:var(--ink-muted);
+    font-size:11px;
+    font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;
+  }
+  .note .body h3{
+    font-size:14px;
+    font-weight:800;
+    margin:0 0 4px;
+    color:var(--ink);
+  }
+  .note .body p{
+    font-size:13px;
+    line-height:1.55;
+    color:var(--ink-muted);
+    margin:0;
+  }
+  .swatches{display:flex; gap:6px; margin-top:8px;}
+  .sw{
+    display:flex; align-items:center; gap:5px;
+    font-size:11px; font-weight:700; color:var(--ink-muted);
+  }
+  .sw i{width:9px;height:9px;border-radius:50%; display:inline-block;}
+
+  @media (max-width:900px){
+    .layout{justify-content:center;}
+    .notes{flex-basis:100%; max-width:480px;}
+  }
+  @media (max-width:460px){
+    .phone-shell{width:100%; max-width:398px;}
+  }
+</style>
+
+<div class="stage">
+  <div class="intro">
+    <p class="eyebrow">Redesign · картки маршрутів</p>
+    <h1>Один рядок для номера, типу й маршруту — статус і пересадка більше не борються за місце</h1>
+    <p>Приклад екрана результатів пошуку квитків: прямі рейси та рейси з пересадкою в одній стрічці, ціна лишається у «хмаринці», а найдешевший/найшвидший позначені лише там, де це доречно.</p>
+  </div>
+
+  <div class="layout">
+    <div class="phone-shell">
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="statusbar">
+          <span>09:35</span>
+          <span class="icons">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><path d="M1 9L1 9M4 7v3M7 4v6M10 2v8M13 0v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M7.5 9.5a1 1 0 100-2 1 1 0 000 2z" fill="currentColor"/><path d="M4.2 5.8a4.6 4.6 0 016.6 0M1.8 3.4a8 8 0 0111.4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <svg width="24" height="12" viewBox="0 0 24 12" fill="none"><rect x="1" y="1" width="19" height="10" rx="2.5" stroke="currentColor" stroke-width="1.3"/><rect x="2.5" y="2.5" width="14" height="7" rx="1.2" fill="currentColor"/><rect x="21.5" y="4" width="1.6" height="4" rx="0.8" fill="currentColor"/></svg>
+          </span>
+        </div>
+
+        <div class="app-header">
+          <div class="top">
+            <div class="back">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="titles">
+              <div class="route-title">Одеса-Головна — Київ-Пасажирський</div>
+              <div class="route-date">3 Серпня, Пн</div>
+            </div>
+            <div class="info">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.3" stroke="currentColor" stroke-width="2"/><path d="M12 11v5.5M12 7.6v.1" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="date-tabs">
+          <div class="date-tab"><div class="d">2 Серп</div><div class="w">Неділя</div></div>
+          <div class="date-tab active"><div class="d">3 Серп</div><div class="w">Понеділок</div></div>
+          <div class="date-tab"><div class="d">4 Серп</div><div class="w">Вівторок</div></div>
+          <div class="date-tab"><div class="d">5 Серп</div><div class="w">Середа</div></div>
+        </div>
+
+        <div class="filters">
+          <div class="chip-round">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 4v16M7 20l-3.5-3.5M17 20V4M17 4l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="chip-pill active">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.6" stroke="currentColor" stroke-width="2"/><path d="M12 3v6.4M12 14.6V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            з пересадками
+          </div>
+          <div class="chip-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 20l16-16M8 4H4v4M20 16v4h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            без місць
+          </div>
+        </div>
+
+        <div class="list">
+
+          <!-- 1. Direct — cheapest -->
+          <div class="card cheap">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">288Ш</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="status-chip cheap">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="2.2"/><path d="M12 6.8v10.4M9 8.7c0-1 1.2-1.8 3-1.8s3 .8 3 1.9c0 2.6-6 1.2-6 3.8 0 1.1 1.2 1.9 3 1.9s3-.8 3-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              найдешевший
+            </div>
+            <div class="time-row">
+              <div class="time-block">
+                <div class="t">10:10</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">8 год 31 хв</div>
+                <div class="duration-track"></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">18:41</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="price-row">
+              <div class="price-bubble">
+                <div class="cls">Плацкарт · 3</div>
+                <div class="amt">380<sup>₴</sup></div>
+              </div>
+              <div class="price-bubble">
+                <div class="cls">Купе · 1</div>
+                <div class="amt">446<sup>₴</sup></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Direct — fastest -->
+          <div class="card fast">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">112К</span>
+              <span class="tag-service">IC+</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="status-chip fast">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              найшвидший
+            </div>
+            <div class="time-row">
+              <div class="time-block">
+                <div class="t">09:05</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">6 год 15 хв</div>
+                <div class="duration-track"></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">15:20</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="price-row">
+              <div class="price-bubble">
+                <div class="cls">IC клас · 48</div>
+                <div class="amt">620<sup>₴</sup></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Direct — plain, single class -->
+          <div class="card">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">266Л</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="time-row" style="margin-top:12px;">
+              <div class="time-block">
+                <div class="t">12:13</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">8 год 56 хв</div>
+                <div class="duration-track"></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">21:09</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="price-row">
+              <div class="price-bubble">
+                <div class="cls">Люкс · 17</div>
+                <div class="amt">2448<sup>₴</sup></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Direct — overnight, dates differ -->
+          <div class="card">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">148Ш</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="time-row" style="margin-top:12px;">
+              <div class="time-block">
+                <div class="t">19:55</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">12 год 47 хв</div>
+                <div class="duration-track"></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">08:42</div>
+                <div class="d">4 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="price-row">
+              <div class="price-bubble">
+                <div class="cls">Плацкарт · 12</div>
+                <div class="amt">350<sup>₴</sup></div>
+              </div>
+              <div class="price-bubble">
+                <div class="cls">Купе · 5</div>
+                <div class="amt">410<sup>₴</sup></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Transfer -->
+          <div class="card transfer">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">754П</span>
+              <span class="interchange-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="tag-number">043П</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="time-row" style="margin-top:12px;">
+              <div class="time-block">
+                <div class="t">07:20</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">14 год 43 хв</div>
+                <div class="duration-track"><span class="transfer-mark" style="left:34%;"></span></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">22:03</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="transfer-row">
+              <div class="transfer-info">
+                <span class="dot-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                </span>
+                <span class="txt">
+                  <div class="l1">Пересадка 4 год 25 хв</div>
+                  <div class="l2">Олександрія</div>
+                </span>
+              </div>
+              <div class="transfer-price">від 786<span> ₴</span></div>
+            </div>
+          </div>
+
+          <!-- 6. Transfer, mixed service -->
+          <div class="card transfer">
+            <div class="chevron"><svg width="7" height="12" viewBox="0 0 7 12" fill="none"><path d="M1 1l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="id-row">
+              <span class="tag-number">754П</span>
+              <span class="interchange-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="tag-number">122Ш</span>
+              <span class="route-caption">Одеса-Гол → Київ-Пас</span>
+            </div>
+            <div class="time-row" style="margin-top:12px;">
+              <div class="time-block">
+                <div class="t">07:20</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Одеса</div>
+              </div>
+              <div class="duration-col">
+                <div class="duration-label">12 год 5 хв</div>
+                <div class="duration-track"><span class="transfer-mark" style="left:58%;"></span></div>
+              </div>
+              <div class="time-block end">
+                <div class="t">19:25</div>
+                <div class="d">3 Серп</div>
+                <div class="c">Київ</div>
+              </div>
+            </div>
+            <div class="transfer-row">
+              <div class="transfer-info">
+                <span class="dot-icon">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                </span>
+                <span class="txt">
+                  <div class="l1">Пересадка 2 год 23 хв</div>
+                  <div class="l2">Знам'янка</div>
+                </span>
+              </div>
+              <div class="transfer-price">від 601<span> ₴</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h2>Що змінилось і чому</h2>
+
+      <div class="note">
+        <span class="num">1</span>
+        <div class="body">
+          <h3>Номер, тип і маршрут — один блок</h3>
+          <p>Замість окремого прапорця з номером і підпису «Одеса-Гол → Київ-Пас» під часом, тепер це один верхній рядок: пронумерований ярлик (у формі вирізаного «квитка», відсилання до старого прапорця), тег сервісу типу IC+ і сам маршрут праворуч, приглушеним кольором — саме так, як просив директор.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="num">2</span>
+        <div class="body">
+          <h3>Статус — окремий рядок, тільки для прямих</h3>
+          <p>«Найдешевший» і «найшвидший» — компактні підписані чипи одразу під верхнім рядком, кожен свого кольору. У картках з пересадкою цього рядка просто немає: порівнювати «найдешевший з пересадкою» нема сенсу, коли пряма опція вже показала свою ціну.</p>
+          <div class="swatches">
+            <span class="sw"><i style="background:var(--cheap)"></i>найдешевший</span>
+            <span class="sw"><i style="background:var(--fast)"></i>найшвидший</span>
+            <span class="sw"><i style="background:var(--transfer)"></i>пересадка</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="num">3</span>
+        <div class="body">
+          <h3>Час, дата і місто — як на референсі</h3>
+          <p>Велике жирне «10:10», під ним дрібна дата і жирна назва міста — саме порядок з третього скріна. Дата тут не для краси: у нічному потягу (148Ш) видно, що приїзд вже наступного дня — «3 Серп» зліва, «4 Серп» справа.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="num">4</span>
+        <div class="body">
+          <h3>Лінія маршруту фарбується у колір статусу</h3>
+          <p>Кружечки і лінія між часами беруть колір чипа (зелений/фіолетовий), а на пересадці лишаються бурштиновими з маленькою міткою в точці пересадки — миттєво видно тип картки навіть боковим зором, без жирних плашок.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="num">5</span>
+        <div class="body">
+          <h3>Ціна: «хмаринка» для прямих, рядок — для пересадки</h3>
+          <p>Прямі рейси лишають ціну у м'якому сірому блоці по класах, як просили. У картці з пересадкою це лише орієнтовна ціна «від», тому вона йде звичайним жирним текстом поруч з підписом пересадки — без зайвої хмаринки, яка б натякала на точну вартість.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <span class="num">6</span>
+        <div class="body">
+          <h3>Пересадка лишилась «як є»</h3>
+          <p>Іконка, тривалість і назва станції пересадки — той самий зміст, що й зараз, лише вирівняний під нову типографіку картки. Деталізацію самого маршруту пересадки (приміська електричка, автобус) навмисно не чіпали — вона й так розкривається на екрані деталей.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
