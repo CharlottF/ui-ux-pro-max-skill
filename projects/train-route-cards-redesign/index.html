@@ -91,6 +91,13 @@
   }
   .connector .durpill svg{opacity:.75;}
   .connector .stop{position:absolute; top:13px; width:6px;height:6px;border-radius:50%; background:var(--orange); border:1.6px solid var(--surface); transform:translate(-50%,-50%);}
+  .connector .legicon{
+    position:absolute; top:13px; width:17px; height:17px; border-radius:50%;
+    background:var(--surface); border:1.5px solid var(--line); color:var(--ink-muted);
+    display:flex; align-items:center; justify-content:center;
+    transform:translate(-50%,-50%);
+  }
+  .connector .legicon svg{opacity:1;}
 
   /* ---------- бульбашка ціни — тихіша за час/дату/місто; грід під 1-4 класи ---------- */
   .pricerow{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:13px;}
@@ -119,8 +126,8 @@
 <div class="stage">
   <div class="intro">
     <p class="eyebrow">Redesign · фінальний напрям</p>
-    <h1>«Платформа» — той самий обраний варіант картки</h1>
-    <p>Кольорова смуга-статус зверху, пунктирний конектор з піґулкою тривалості, час/дата/місто в пріоритеті, ціна тихо в бульбашці. Номери етапів пересадки — знову окремі пігулки зі стрілочкою, без іконок транспорту та без зрощеного блоку. Підпис поруч більше не через «+»: «потяг та автобус» замість «потяг + автобус», а для однотипних пересадок — просто кількість («2 потяги», «3 потяги»).</p>
+    <h1>«Платформа» — вид транспорту тепер на самій лінії маршруту</h1>
+    <p>Кольорова смуга-статус зверху, пунктирний конектор з піґулкою тривалості, час/дата/місто в пріоритеті, ціна тихо в бульбашці. Номери етапів — знову прості пігулки зі стрілочкою, без іконок усередині. Замість цього, як у Google Maps і Rome2Rio, маленькі іконки виду транспорту сидять прямо на пунктирній лінії між зупинками — тільки там, де види й справді різні (потяг → автобус). Для однотипних пересадок (потяг → потяг) лінія лишається чистою, лише з крапкою в місці пересадки.</p>
   </div>
 
   <div class="phone-shell">
@@ -250,7 +257,12 @@
             <div class="idrow"><span class="tagnum">754П</span><span class="xchg"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 20l-4-4 4-4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="tagnum">№14</span><span class="routecap">потяг та автобус</span></div>
             <div class="timerow">
               <div class="tblock"><div class="t">08:10</div><div class="d">3 Серп</div><div class="c">Одеса</div></div>
-              <div class="connector"><div class="track"></div><span class="stop" style="left:46%;"></span><span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>11 год 05 хв</span></div>
+              <div class="connector">
+                <div class="track"></div>
+                <span class="legicon" style="left:12%;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="11" rx="3" stroke="currentColor" stroke-width="2"/><path d="M5 11h14" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="20" r="1.4" fill="currentColor"/><circle cx="15.5" cy="20" r="1.4" fill="currentColor"/></svg></span>
+                <span class="legicon" style="left:88%;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M4 16V7a2 2 0 012-2h12a2 2 0 012 2v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="7" width="16" height="9" rx="1.5" stroke="currentColor" stroke-width="2"/><path d="M4 13h16" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="18.5" r="1.5" fill="currentColor"/><circle cx="16" cy="18.5" r="1.5" fill="currentColor"/></svg></span>
+                <span class="durpill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>11 год 05 хв</span>
+              </div>
               <div class="tblock end"><div class="t">19:15</div><div class="d">3 Серп</div><div class="c">Київ</div></div>
             </div>
             <div class="trrow">
