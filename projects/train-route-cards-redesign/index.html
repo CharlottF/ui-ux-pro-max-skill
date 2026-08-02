@@ -12,14 +12,12 @@
     --ink-faint:#9BA1C0;
     --navy:#1E2A66;
     --navy-ink:#EDEFFB;
+    --blue:#2A4FD8;
+    --blue-bg:#E5EAFC;
     --orange:#E8871E;
     --orange-bg:#FCEBD6;
     --cheap:#12946F;
     --cheap-bg:#DEF3EA;
-    --fast:#6C4CD8;
-    --fast-bg:#EBE5FC;
-    --transfer:#C9761A;
-    --transfer-bg:#FBF0DE;
     --bubble:#F1F3F9;
     --line:#E4E8F3;
     --shadow: 0 1px 2px rgba(21,27,51,.04), 0 8px 20px -12px rgba(21,27,51,.18);
@@ -37,14 +35,12 @@
       --ink-faint:#666D91;
       --navy:#3A54D6;
       --navy-ink:#F2F4FF;
+      --blue:#7C93FF;
+      --blue-bg:#1C2554;
       --orange:#F0A24E;
       --orange-bg:#3A2A14;
       --cheap:#3FD9AA;
       --cheap-bg:#0F3B30;
-      --fast:#A692FF;
-      --fast-bg:#2A2258;
-      --transfer:#F0B15C;
-      --transfer-bg:#3A2C12;
       --bubble:#1D2440;
       --line:#2A3157;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 24px -14px rgba(0,0,0,.6);
@@ -53,16 +49,16 @@
   }
   :root[data-theme="dark"]{
     --bg:#0B0F1E; --page-ink:#EDEFFB; --page-ink-soft:#9096B8; --surface:#151B33; --ink:#EDEFFB;
-    --ink-muted:#9096B8; --ink-faint:#666D91; --navy:#3A54D6; --navy-ink:#F2F4FF; --orange:#F0A24E;
-    --orange-bg:#3A2A14; --cheap:#3FD9AA; --cheap-bg:#0F3B30; --fast:#A692FF; --fast-bg:#2A2258;
-    --transfer:#F0B15C; --transfer-bg:#3A2C12; --bubble:#1D2440; --line:#2A3157;
+    --ink-muted:#9096B8; --ink-faint:#666D91; --navy:#3A54D6; --navy-ink:#F2F4FF; --blue:#7C93FF;
+    --blue-bg:#1C2554; --orange:#F0A24E; --orange-bg:#3A2A14; --cheap:#3FD9AA; --cheap-bg:#0F3B30;
+    --bubble:#1D2440; --line:#2A3157;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 24px -14px rgba(0,0,0,.6); --device-frame:#000000;
   }
   :root[data-theme="light"]{
     --bg:#EEF1F8; --page-ink:#151B33; --page-ink-soft:#5C6488; --surface:#FFFFFF; --ink:#151B33;
-    --ink-muted:#6B7290; --ink-faint:#9BA1C0; --navy:#1E2A66; --navy-ink:#EDEFFB; --orange:#E8871E;
-    --orange-bg:#FCEBD6; --cheap:#12946F; --cheap-bg:#DEF3EA; --fast:#6C4CD8; --fast-bg:#EBE5FC;
-    --transfer:#C9761A; --transfer-bg:#FBF0DE; --bubble:#F1F3F9; --line:#E4E8F3;
+    --ink-muted:#6B7290; --ink-faint:#9BA1C0; --navy:#1E2A66; --navy-ink:#EDEFFB; --blue:#2A4FD8;
+    --blue-bg:#E5EAFC; --orange:#E8871E; --orange-bg:#FCEBD6; --cheap:#12946F; --cheap-bg:#DEF3EA;
+    --bubble:#F1F3F9; --line:#E4E8F3;
     --shadow: 0 1px 2px rgba(21,27,51,.04), 0 8px 20px -12px rgba(21,27,51,.18); --device-frame:#0E1424;
   }
 
@@ -308,7 +304,7 @@
     margin-top:7px;
   }
   .status-chip.cheap{background:var(--cheap-bg); color:var(--cheap);}
-  .status-chip.fast{background:var(--fast-bg); color:var(--fast);}
+  .status-chip.fast{background:var(--blue-bg); color:var(--blue);}
   .status-chip svg{flex:0 0 auto;}
 
   .time-row{
@@ -371,24 +367,21 @@
   .duration-track::before{
     left:-2px;
     background:var(--surface);
-    border:2px solid var(--dot-color, var(--navy));
+    border:2px solid var(--blue);
   }
   .duration-track::after{
     right:-2px;
-    background:var(--dot-color, var(--navy));
+    background:var(--blue);
   }
   .duration-track .transfer-mark{
     position:absolute;
     top:50%;
     width:6px;height:6px;
     border-radius:50%;
-    background:var(--transfer);
+    background:var(--orange);
     border:2px solid var(--surface);
     transform:translate(-50%,-50%);
   }
-  .card.cheap .duration-track{--dot-color:var(--cheap);}
-  .card.fast .duration-track{--dot-color:var(--fast);}
-  .card.transfer .duration-track{--dot-color:var(--transfer);}
 
   .price-row{
     display:flex;
@@ -443,8 +436,8 @@
   .transfer-info .dot-icon{
     width:22px;height:22px;
     border-radius:50%;
-    background:var(--transfer-bg);
-    color:var(--transfer);
+    background:var(--orange-bg);
+    color:var(--orange);
     display:flex;align-items:center;justify-content:center;
     flex:0 0 auto;
   }
@@ -453,7 +446,7 @@
   .transfer-price{
     font-size:14.5px;
     font-weight:800;
-    color:var(--transfer);
+    color:var(--blue);
     white-space:nowrap;
     font-variant-numeric:tabular-nums;
   }
@@ -829,8 +822,8 @@
           <p>«Найдешевший» і «найшвидший» — компактні підписані чипи одразу під верхнім рядком, кожен свого кольору. У картках з пересадкою цього рядка просто немає: порівнювати «найдешевший з пересадкою» нема сенсу, коли пряма опція вже показала свою ціну.</p>
           <div class="swatches">
             <span class="sw"><i style="background:var(--cheap)"></i>найдешевший</span>
-            <span class="sw"><i style="background:var(--fast)"></i>найшвидший</span>
-            <span class="sw"><i style="background:var(--transfer)"></i>пересадка</span>
+            <span class="sw"><i style="background:var(--blue)"></i>найшвидший</span>
+            <span class="sw"><i style="background:var(--orange)"></i>пересадка</span>
           </div>
         </div>
       </div>
@@ -846,8 +839,8 @@
       <div class="note">
         <span class="num">4</span>
         <div class="body">
-          <h3>Лінія маршруту фарбується у колір статусу</h3>
-          <p>Кружечки і лінія між часами беруть колір чипа (зелений/фіолетовий), а на пересадці лишаються бурштиновими з маленькою міткою в точці пересадки — миттєво видно тип картки навіть боковим зором, без жирних плашок.</p>
+          <h3>Лінія маршруту — той самий синій, що й зараз</h3>
+          <p>Кружечки й лінія між часами лишаються фірмовим синім акцентом додатку (тим самим, що зараз у «від 786 ₴» і в активній даті) на всіх картках без винятку — жодних нових відтінків. На пересадці на лінії з'являється лише маленька помаранчева крапка в точці пересадки — той самий помаранчевий, що й у тега «IC+», просто вказує на місце, а не вигадує нову семантику кольору.</p>
         </div>
       </div>
 
