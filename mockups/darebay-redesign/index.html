@@ -37,6 +37,7 @@
     background:var(--bg);
     color:var(--text);
     font-family:var(--font);
+    font-variant-numeric:tabular-nums;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     padding-bottom:78px;
@@ -207,24 +208,10 @@
 
   /* ---------- screenshot placeholder frames ---------- */
   .hero-visual{ position:relative; display:flex; justify-content:center; }
-  .shot-frame{
-    width:100%; max-width:440px;
-    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
-    border:1px solid var(--border);
-    border-radius:var(--radius-lg);
-    box-shadow:0 30px 70px -24px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.02);
-    overflow:hidden;
-    transform:rotate(-1.2deg);
-    transition:transform .4s ease;
-  }
-  .shot-frame:hover{ transform:rotate(0deg) translateY(-4px); }
-  .shot-frame .chrome{ display:flex; align-items:center; gap:6px; padding:11px 14px; border-bottom:1px solid var(--border-soft); }
-  .shot-frame .chrome .dot{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.14); }
-  .shot-frame .chrome .addr{ margin-left:8px; flex:1; height:20px; border-radius:999px; background:rgba(255,255,255,0.04); display:flex; align-items:center; padding:0 12px; font-size:11px; color:var(--text-dimmer); gap:6px; }
+  .visual-stage{ position:relative; padding:34px 30px 10px; }
   .shot-slot{
-    margin:14px; border-radius:14px;
-    aspect-ratio:16/11;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
     border:1.5px dashed rgba(255,255,255,0.16);
     background:
       repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 10px, transparent 10px 20px);
@@ -234,12 +221,51 @@
   .shot-slot svg{ color:var(--teal); opacity:.7; }
   .shot-slot .lbl{ font-size:13px; font-weight:600; color:var(--text-dim); }
   .shot-slot .sub{ font-size:11.5px; }
-  .shot-frame.phone{ max-width:220px; border-radius:34px; padding:10px 10px 16px; box-shadow:0 24px 60px -20px rgba(0,0,0,0.65); }
-  .shot-frame.phone .notch{ width:70px; height:18px; border-radius:999px; background:var(--bg); margin:2px auto 8px; }
-  .shot-frame.phone .shot-slot{ margin:0; border-radius:22px; aspect-ratio:9/17.5; }
   .task-card.shot-card{ background:linear-gradient(180deg, var(--bg-2), var(--bg-1)); }
   .task-card.shot-card .task-thumb{ height:180px; align-items:center; justify-content:center; padding:0; }
   .task-card.shot-card .shot-slot{ width:calc(100% - 24px); height:calc(100% - 24px); margin:0; aspect-ratio:auto; }
+
+  /* ---------- hero clip mockup ---------- */
+  .clip-frame{
+    width:236px; aspect-ratio:9/17.6;
+    border-radius:32px;
+    border:7px solid var(--bg-1);
+    background:linear-gradient(165deg, var(--bg-2), #061510);
+    position:relative; overflow:hidden;
+    box-shadow:0 40px 80px -22px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.03);
+    transform:rotate(-2deg);
+    transition:transform .4s ease;
+  }
+  .clip-frame:hover{ transform:rotate(0deg) translateY(-4px); }
+  .clip-frame .clip-slot{ position:absolute; inset:22px 10px 68px; margin:0; }
+  .clip-frame .scrubber{ position:absolute; top:14px; left:14px; right:14px; height:3px; border-radius:3px; background:rgba(255,255,255,0.18); }
+  .clip-frame .scrubber .fill{ position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--teal); border-radius:3px; }
+  .clip-frame .scrubber .head{ position:absolute; left:38%; top:50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px; border-radius:50%; background:#fff; box-shadow:0 0 0 3px rgba(52,230,173,0.35); }
+  .clip-frame .clip-rail{ position:absolute; right:10px; bottom:78px; display:flex; flex-direction:column; gap:12px; align-items:center; }
+  .clip-frame .clip-rail .ic{
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(8,20,16,0.55); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .clip-frame .clip-caption{ position:absolute; left:14px; right:14px; bottom:14px; }
+  .clip-frame .code-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(5,15,11,0.8); border:1px solid rgba(52,230,173,0.35);
+    color:var(--teal); font-size:11px; font-weight:800; letter-spacing:.4px;
+    padding:6px 10px; border-radius:999px; margin-bottom:7px;
+  }
+  .clip-frame .views-line{ color:rgba(255,255,255,0.75); font-size:11.5px; }
+  .float-chip{
+    position:absolute; display:flex; align-items:center; gap:7px;
+    background:var(--bg-2); border:1px solid var(--border);
+    padding:9px 14px; border-radius:999px;
+    font-size:12.5px; font-weight:600; color:var(--text-dim);
+    box-shadow:0 16px 30px -14px rgba(0,0,0,0.6);
+  }
+  .float-chip svg{ color:var(--teal); flex-shrink:0; }
+  .float-chip.chip-a{ top:2px; left:-8px; transform:rotate(-4deg); }
+  @media(max-width:539px){ .float-chip.chip-a{ left:50%; transform:translateX(-50%) rotate(-2deg); } }
 
   /* ---------- mascot ---------- */
   .mascot{ position:absolute; filter:drop-shadow(0 10px 18px rgba(0,0,0,0.45)); }
@@ -268,7 +294,7 @@
     0%,100%{ opacity:.2; transform:scale(.7); }
     50%{ opacity:1; transform:scale(1); }
   }
-  .mascot-hero{ width:92px; right:-14px; bottom:-18px; }
+  .mascot-hero{ width:88px; right:-8px; bottom:-4px; }
   .mascot-cta{ position:relative; width:96px; margin:0 auto 6px; }
   @media(prefers-reduced-motion:reduce){
     .mascot .bob, .mascot .arm-l, .mascot .arm-r, .mascot .spark{ animation:none; }
@@ -282,6 +308,7 @@
     padding:30px;
     position:relative;
     overflow:hidden;
+    transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
   }
   .card::before{
     content:"";
@@ -293,11 +320,13 @@
     pointer-events:none;
   }
   .card > *{ position:relative; z-index:1; }
+  .card:hover{ transform:translateY(-5px); border-color:rgba(52,230,173,0.32); box-shadow:0 24px 50px -28px rgba(0,0,0,0.7); }
   .card-icon{
-    width:44px; height:44px; border-radius:13px;
+    width:52px; height:52px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(52,230,173,0.09);
-    border:1px solid rgba(52,230,173,0.22);
+    background:radial-gradient(circle at 32% 28%, rgba(52,230,173,0.22), rgba(52,230,173,0.05));
+    border:1px solid rgba(52,230,173,0.28);
+    box-shadow:0 0 0 4px rgba(52,230,173,0.05);
     color:var(--teal);
     margin-bottom:18px;
   }
@@ -311,14 +340,25 @@
   .bullets li::before{ content:"–"; color:var(--teal); font-weight:800; flex-shrink:0; }
 
   /* ---------- three modes ---------- */
-  .modes-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
-  @media(min-width:840px){ .modes-grid{ grid-template-columns:repeat(3,1fr); } }
+  .modes-equation{ display:flex; flex-direction:column; gap:16px; align-items:stretch; }
+  @media(min-width:900px){ .modes-equation{ flex-direction:row; align-items:center; gap:14px; } }
+  .modes-equation .mode-card{ flex:1; }
+  .eq-symbol{
+    align-self:center; flex-shrink:0;
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--teal); font-size:19px; font-weight:800;
+    background:var(--bg-1); border:1px solid var(--border);
+  }
   .mode-card p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; margin-top:8px; }
   .mode-card.recommended{
     border:1px solid rgba(52,230,173,0.5);
     background:linear-gradient(180deg, rgba(52,230,173,0.08), var(--bg-1));
     box-shadow:0 0 0 1px rgba(52,230,173,0.08), 0 20px 50px -20px var(--teal-glow);
   }
+  @media(min-width:900px){ .mode-card.recommended{ flex:1.14; transform:scale(1.045); } }
+  .mode-card.recommended:hover{ transform:translateY(-5px); }
+  @media(min-width:900px){ .mode-card.recommended:hover{ transform:scale(1.045) translateY(-5px); } }
   .rec-badge{
     display:inline-flex; align-items:center; gap:6px;
     background:rgba(52,230,173,0.14); color:var(--teal);
@@ -393,28 +433,69 @@
   .step-content p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; max-width:520px; }
 
   /* ---------- two sides ---------- */
-  .sides-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
-  @media(min-width:840px){ .sides-grid{ grid-template-columns:1fr 1fr; } }
-  .side-card{ display:flex; flex-direction:column; }
-  .side-card .eyebrow{ margin-bottom:10px; }
-  .side-card h3{ font-size:22px; margin-bottom:6px; }
-  .side-card .btn{ margin-top:26px; align-self:flex-start; }
-  .side-card.creators{ border-color:rgba(52,230,173,0.28); }
+  .split-card{
+    display:flex; flex-direction:column;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0),
+      linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    background-size:20px 20px, 100% 100%;
+    border:1px solid var(--border); border-radius:var(--radius-xl);
+    overflow:hidden; position:relative;
+  }
+  @media(min-width:840px){ .split-card{ flex-direction:row; align-items:stretch; } }
+  .split-half{ display:flex; flex-direction:column; padding:34px; flex:1; }
+  .split-half .eyebrow{ margin-bottom:10px; }
+  .split-half h3{ font-size:22px; margin-bottom:6px; }
+  .split-half .btn{ margin-top:26px; align-self:flex-start; }
+  .split-mid{ display:flex; align-items:center; justify-content:center; padding:0 34px 24px; }
+  @media(min-width:840px){ .split-mid{ flex-direction:column; padding:34px 0; } }
+  .split-mid::before, .split-mid::after{ content:""; flex:1; background:var(--border-soft); }
+  .split-mid::before, .split-mid::after{ height:1px; }
+  @media(min-width:840px){ .split-mid::before, .split-mid::after{ height:auto; width:1px; } }
+  .split-emblem{
+    flex-shrink:0; width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(52,230,173,0.08); border:1px solid rgba(52,230,173,0.32);
+    color:var(--teal); margin:0 12px;
+  }
+  @media(min-width:840px){ .split-emblem{ margin:12px 0; } }
 
-  /* ---------- report ---------- */
+  /* ---------- report (receipt) ---------- */
   .report-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
   @media(min-width:900px){ .report-grid{ grid-template-columns:1.3fr 1fr; } }
+  .receipt{
+    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--border); border-radius:18px 18px 0 0;
+    padding:28px 28px 40px;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    clip-path:polygon(0% 0%,100% 0%,100% 92%,95% 100%,90% 92%,85% 100%,80% 92%,75% 100%,70% 92%,65% 100%,60% 92%,55% 100%,50% 92%,45% 100%,40% 92%,35% 100%,30% 92%,25% 100%,20% 92%,15% 100%,10% 92%,5% 100%,0% 92%);
+  }
+  .receipt-head{ display:flex; align-items:center; gap:9px; padding-bottom:16px; border-bottom:1px dashed var(--border); }
+  .receipt-head svg{ color:var(--teal); flex-shrink:0; }
+  .receipt-head b{ font-family:var(--font); letter-spacing:1.5px; font-size:13px; }
+  .receipt-head span{ color:var(--text-dimmer); font-size:11.5px; }
+  .receipt-ref{ color:var(--text-dimmer); font-size:12px; padding:14px 0 4px; }
   .report-list{ list-style:none; }
   .report-list li{
     display:flex; justify-content:space-between; align-items:baseline;
-    padding:16px 0; border-top:1px solid var(--border-soft);
-    color:var(--text-dim); font-size:15px;
+    padding:13px 0; border-top:1px dashed var(--border-soft);
+    color:var(--text-dim); font-size:14px;
   }
-  .report-list li:last-child{ border-bottom:1px solid var(--border-soft); }
-  .report-list li span.val{ color:#fff; font-weight:700; font-size:17px; }
+  .report-list li span.val{ color:#fff; font-weight:700; font-size:15.5px; }
+  .report-list li.money{ border-top:1px solid var(--border); margin-top:4px; padding-top:17px; }
   .report-list li.money span.val{ color:var(--gold); font-size:19px; }
+  .receipt-barcode{
+    height:32px; margin-top:18px;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 2px, transparent 2px 4px, rgba(255,255,255,0.28) 4px 5px, transparent 5px 9px, rgba(255,255,255,0.5) 9px 10px, transparent 10px 14px);
+    opacity:.4;
+  }
   .report-side{ display:flex; flex-direction:column; gap:18px; }
-  .kpi-card{ text-align:left; }
+  .kpi-card{ text-align:left; position:relative; }
+  .kpi-card::before, .kpi-card::after{
+    content:""; position:absolute; left:-1px; width:14px; height:14px;
+    background:var(--bg); border-radius:50%; border:1px solid var(--border);
+  }
+  .kpi-card::before{ top:-7px; } .kpi-card::after{ bottom:-7px; }
   .kpi-card .num{
     font-size:40px; font-weight:800;
     background:linear-gradient(100deg, var(--gold), var(--gold-2));
@@ -579,36 +660,45 @@
         </div>
 
         <div class="hero-visual reveal in">
-          <div class="shot-frame browser">
-            <div class="chrome">
-              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-              <span class="addr">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V8a5 5 0 0 1 10 0v3"/></svg>
-                darebay.com/en
-              </span>
+          <div class="visual-stage">
+            <div class="float-chip chip-a">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+              Verified, not inflated
             </div>
-            <div class="shot-slot">
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
-              <div class="lbl">Platform screenshot</div>
-              <div class="sub">Drop a dashboard or feed capture here</div>
+            <div class="clip-frame">
+              <div class="shot-slot clip-slot">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+                <div class="lbl">Your clip here</div>
+                <div class="sub">Paste a TikTok / Reels capture</div>
+              </div>
+              <div class="scrubber"><span class="fill"></span><span class="head"></span></div>
+              <div class="clip-rail">
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4.5c2 0 3.5 1 6.4 4 2.9-3 4.4-4 6.4-4C21.9 4.5 23.6 8 22 11.7 19.5 16.4 12 21 12 21Z"/></svg></span>
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 9 9 0 0 1-3.6-.7L3 21l1.8-5.4A8.4 8.4 0 0 1 3.5 11 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span>
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14"/></svg></span>
+              </div>
+              <div class="clip-caption">
+                <span class="code-chip">CODE · DOMER21</span>
+                <div class="views-line">128.4K views · counted</div>
+              </div>
             </div>
-          </div>
-          <div class="mascot mascot-hero" aria-hidden="true">
-            <svg viewBox="0 0 100 90" width="92" height="83" fill="none">
-              <g class="bob">
-                <ellipse cx="50" cy="82" rx="20" ry="4" fill="rgba(0,0,0,0.35)"/>
-                <path class="arm-l" d="M20 34 Q4 40 8 54" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
-                <circle class="arm-l" cx="8" cy="54" r="4.5" fill="#1fbf8f"/>
-                <path class="arm-r" d="M80 34 Q97 22 92 8" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
-                <circle class="arm-r" cx="92" cy="8" r="4.5" fill="#1fbf8f"/>
-                <rect x="36" y="64" width="28" height="10" rx="3" fill="#0c8a68"/>
-                <rect x="46" y="56" width="8" height="10" fill="#17a67d"/>
-                <path d="M28 26h44a4 4 0 0 1 4 4c0 22-12 38-28 38S20 52 20 30a4 4 0 0 1 4-4Z" fill="#34e6ad"/>
-                <circle cx="40" cy="42" r="3" fill="#04150f"/>
-                <circle cx="60" cy="42" r="3" fill="#04150f"/>
-                <path d="M40 50 Q50 57 60 50" stroke="#04150f" stroke-width="3" stroke-linecap="round" fill="none"/>
-              </g>
-            </svg>
+            <div class="mascot mascot-hero" aria-hidden="true">
+              <svg viewBox="0 0 100 90" width="88" height="79" fill="none">
+                <g class="bob">
+                  <ellipse cx="50" cy="82" rx="20" ry="4" fill="rgba(0,0,0,0.35)"/>
+                  <path class="arm-l" d="M20 34 Q4 40 8 54" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle class="arm-l" cx="8" cy="54" r="4.5" fill="#1fbf8f"/>
+                  <path class="arm-r" d="M80 34 Q97 22 92 8" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle class="arm-r" cx="92" cy="8" r="4.5" fill="#1fbf8f"/>
+                  <rect x="36" y="64" width="28" height="10" rx="3" fill="#0c8a68"/>
+                  <rect x="46" y="56" width="8" height="10" fill="#17a67d"/>
+                  <path d="M28 26h44a4 4 0 0 1 4 4c0 22-12 38-28 38S20 52 20 30a4 4 0 0 1 4-4Z" fill="#34e6ad"/>
+                  <circle cx="40" cy="42" r="3" fill="#04150f"/>
+                  <circle cx="60" cy="42" r="3" fill="#04150f"/>
+                  <path d="M40 50 Q50 57 60 50" stroke="#04150f" stroke-width="3" stroke-linecap="round" fill="none"/>
+                </g>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -624,8 +714,11 @@
         <p class="lead" style="margin-top:12px;">These are not different products, but one task with different rewards. Start with one mode and add the second whenever you want.</p>
       </div>
 
-      <div class="modes-grid">
+      <div class="modes-equation">
         <div class="card mode-card reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
           <h3>For views</h3>
           <p>You publish a task, creators film clips and post them on their own accounts. You pay for every thousand counted views.</p>
           <ul class="bullets">
@@ -634,7 +727,13 @@
             <li>The unspent balance comes back</li>
           </ul>
         </div>
+
+        <div class="eq-symbol reveal">+</div>
+
         <div class="card mode-card reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19M8 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0Zm12 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>
+          </div>
           <h3>For sales</h3>
           <p>You connect your product to the Darebay storefront. Creators sell it with personal promo codes, and you pay a percentage of paid orders.</p>
           <ul class="bullets">
@@ -643,8 +742,14 @@
             <li>A report down to the order for every post</li>
           </ul>
         </div>
+
+        <div class="eq-symbol reveal">=</div>
+
         <div class="card mode-card recommended reveal">
           <span class="rec-badge">★ We recommend</span>
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-4Z"/></svg>
+          </div>
           <h3>Hybrid</h3>
           <p>Views give reach, the percentage gives a reason to sell. One task carries both rewards and a single payout.</p>
           <ul class="bullets">
@@ -794,8 +899,8 @@
         <h2>One platform, two different interests</h2>
       </div>
 
-      <div class="sides-grid">
-        <div class="card side-card reveal">
+      <div class="split-card reveal">
+        <div class="split-half">
           <div class="card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
           </div>
@@ -811,7 +916,13 @@
           </a>
         </div>
 
-        <div class="card side-card creators reveal">
+        <div class="split-mid">
+          <span class="split-emblem">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4M3 12v-2a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 12v2a4 4 0 0 1-4 4H3"/></svg>
+          </span>
+        </div>
+
+        <div class="split-half creators">
           <div class="card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M12 18v3"/><path d="m10 9 4 2.5L10 14V9Z" fill="currentColor" stroke="none"/></svg>
           </div>
@@ -838,7 +949,15 @@
       </div>
 
       <div class="report-grid">
-        <div class="card reveal">
+        <div class="receipt reveal">
+          <div class="receipt-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+              <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+            </svg>
+            <b>DAREBAY</b> <span>· task receipt</span>
+          </div>
+          <div class="receipt-ref">Домер — Нарезки · #TASK-2291</div>
           <ul class="report-list">
             <li><span>Posts published</span><span class="val" data-count="42">0</span></li>
             <li><span>Counted views</span><span class="val" data-count="1280000">0</span></li>
@@ -847,6 +966,7 @@
             <li><span>Refunds</span><span class="val" data-count="11">0</span></li>
             <li class="money"><span>Net revenue</span><span class="val" data-count="18600" data-prefix="$">$0</span></li>
           </ul>
+          <div class="receipt-barcode"></div>
         </div>
         <div class="report-side">
           <div class="card kpi-card reveal">
