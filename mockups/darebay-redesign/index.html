@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Darebay — Get paid for the content you post</title>
+<meta name="description" content="Darebay redesign concept — dozens of creators selling your product through short-video clips.">
+<style>
+  :root{
+    --bg: #050f0b;
+    --bg-1: #081712;
+    --bg-2: #0c1f18;
+    --card: rgba(255,255,255,0.035);
+    --card-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.09);
+    --border-soft: rgba(255,255,255,0.06);
+    --teal: #34e6ad;
+    --teal-2: #1fbf8f;
+    --teal-glow: rgba(52,230,173,0.35);
+    --gold: #f6b93b;
+    --gold-2: #ffcf6e;
+    --text: #f3f7f5;
+    --text-dim: #a9bdb5;
+    --text-dimmer: #6f8880;
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-full: 999px;
+    --maxw: 1180px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-logo: "Segoe Script", "Brush Script MT", "Snell Roundhand", cursive;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-bottom:78px;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size:26px 26px;
+    opacity:.4;
+    pointer-events:none;
+    z-index:0;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px; position:relative; z-index:1;}
+  @media(min-width:900px){ .wrap{padding:0 40px;} }
+
+  /* ---------- glow blobs ---------- */
+  .glow{position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0;}
+  .glow-teal{background:radial-gradient(circle, var(--teal-glow), transparent 70%); width:520px; height:520px;}
+  .glow-gold{background:radial-gradient(circle, rgba(246,185,59,0.28), transparent 70%); width:420px; height:420px;}
+  @keyframes float{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-18px,26px) scale(1.06); }
+  }
+  @keyframes float2{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(20px,-18px) scale(1.04); }
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    padding:14px 0;
+  }
+  .header-inner{
+    max-width:var(--maxw); margin:0 auto; padding:0 16px;
+  }
+  .navbar{
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(8,20,16,0.72);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid var(--border);
+    border-radius:var(--radius-full);
+    padding:9px 10px 9px 18px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .logo{
+    display:flex; align-items:center; gap:9px;
+    font-family:var(--font-logo);
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#fff;
+  }
+  .logo svg{ width:26px; height:26px; flex-shrink:0; }
+  .nav-actions{ display:flex; align-items:center; gap:8px; }
+  .icon-btn{
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border);
+    color:var(--teal);
+    background:transparent;
+    transition:.2s;
+  }
+  .icon-btn:hover{ background:var(--card-hover); }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 24px;
+    border-radius:var(--radius-full);
+    font-weight:700; font-size:15px;
+    border:1px solid transparent;
+    white-space:nowrap;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .btn-sm{ padding:10px 18px; font-size:14px; }
+  .btn-fill{
+    background:linear-gradient(135deg, var(--teal), var(--teal-2));
+    color:#04150f;
+    box-shadow:0 6px 24px -6px var(--teal-glow);
+  }
+  .btn-fill:hover{ transform:translateY(-2px); box-shadow:0 10px 32px -6px var(--teal-glow); }
+  .btn-fill:active{ transform:translateY(0); }
+  .btn-outline{
+    border-color:rgba(255,255,255,0.22);
+    color:#fff;
+    background:rgba(255,255,255,0.02);
+  }
+  .btn-outline:hover{ background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.35); }
+  .btn-block{ width:100%; }
+  .link-arrow{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--text-dim); font-weight:600; font-size:14.5px;
+    border-bottom:1px solid rgba(255,255,255,0.18);
+    padding-bottom:2px;
+    transition:.2s;
+  }
+  .link-arrow:hover{ color:#fff; border-color:#fff; }
+  .link-arrow svg{ transition:transform .2s; }
+  .link-arrow:hover svg{ transform:translateX(3px); }
+
+  /* ---------- badges / eyebrows ---------- */
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid rgba(52,230,173,0.35);
+    color:var(--teal);
+    background:rgba(52,230,173,0.06);
+    padding:8px 16px;
+    border-radius:var(--radius-full);
+    font-size:13.5px; font-weight:600;
+  }
+  .badge .dot{ width:6px; height:6px; border-radius:50%; border:1.5px solid var(--teal); }
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    color:var(--teal);
+    font-size:12.5px; font-weight:800;
+    letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--teal); border-radius:2px; }
+
+  h1,h2,h3{ font-weight:800; letter-spacing:-0.02em; color:#fff; line-height:1.08; }
+  h1{ font-size:clamp(34px,6vw,58px); }
+  h2{ font-size:clamp(28px,4.4vw,42px); }
+  h3{ font-size:19px; }
+  .lead{ color:var(--text-dim); font-size:17px; line-height:1.6; }
+  .section{ padding:76px 0; position:relative; }
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:56px 0 40px; position:relative; overflow:hidden; }
+  .hero .glow-teal{ top:-160px; left:-140px; animation:float 14s ease-in-out infinite; }
+  .hero .glow-gold{ top:60px; right:-160px; animation:float2 16s ease-in-out infinite; }
+  .hero-inner{ max-width:760px; }
+  .hero .badge{ margin-bottom:24px; }
+  .hero h1{ margin-bottom:20px; }
+  .hero h1 .accent{
+    background:linear-gradient(100deg, var(--teal), var(--gold-2) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .lead{ max-width:600px; margin-bottom:32px; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:18px; }
+  .hero-note{ color:var(--text-dimmer); font-size:14px; margin:18px 0 26px; max-width:480px; }
+
+  .stat-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .stat-pill{
+    display:flex; align-items:baseline; gap:6px;
+    background:var(--card);
+    border:1px solid var(--border-soft);
+    padding:11px 18px;
+    border-radius:var(--radius-full);
+    font-size:14px; color:var(--text-dim);
+    transition:.2s;
+  }
+  .stat-pill:hover{ background:var(--card-hover); transform:translateY(-2px); }
+  .stat-pill b{ color:var(--gold); font-size:15.5px; font-weight:800; }
+  .stat-pill.link{ color:var(--teal); border-color:rgba(52,230,173,0.3); }
+  .stat-pill.link b{ color:var(--teal); }
+
+  /* ---------- cards generic ---------- */
+  .card{
+    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--border);
+    border-radius:var(--radius-xl);
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size:20px 20px;
+    -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.5), transparent 65%);
+    mask-image:linear-gradient(180deg, rgba(0,0,0,.5), transparent 65%);
+    pointer-events:none;
+  }
+  .card > *{ position:relative; z-index:1; }
+  .card-icon{
+    width:44px; height:44px; border-radius:13px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(52,230,173,0.09);
+    border:1px solid rgba(52,230,173,0.22);
+    color:var(--teal);
+    margin-bottom:18px;
+  }
+  .bullets{ list-style:none; margin-top:16px; }
+  .bullets li{
+    display:flex; gap:10px;
+    padding:13px 0;
+    border-top:1px solid var(--border-soft);
+    color:var(--text-dim); font-size:14.5px; line-height:1.5;
+  }
+  .bullets li::before{ content:"–"; color:var(--teal); font-weight:800; flex-shrink:0; }
+
+  /* ---------- three modes ---------- */
+  .modes-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
+  @media(min-width:840px){ .modes-grid{ grid-template-columns:repeat(3,1fr); } }
+  .mode-card p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; margin-top:8px; }
+  .mode-card.recommended{
+    border:1px solid rgba(52,230,173,0.5);
+    background:linear-gradient(180deg, rgba(52,230,173,0.08), var(--bg-1));
+    box-shadow:0 0 0 1px rgba(52,230,173,0.08), 0 20px 50px -20px var(--teal-glow);
+  }
+  .rec-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(52,230,173,0.14); color:var(--teal);
+    border:1px solid rgba(52,230,173,0.4);
+    font-size:11.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
+    padding:6px 12px; border-radius:var(--radius-full);
+    margin-bottom:14px;
+  }
+  .modes-cta{ margin-top:30px; display:flex; }
+
+  /* ---------- catalogue ---------- */
+  .catalogue-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .task-scroller{
+    display:flex; gap:18px; overflow-x:auto; padding:8px 2px 20px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+  .task-scroller::-webkit-scrollbar{ height:6px; }
+  .task-scroller::-webkit-scrollbar-thumb{ background:var(--border); border-radius:10px; }
+  .task-card{
+    flex:0 0 260px; scroll-snap-align:start;
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:var(--bg-1);
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .task-card:hover{ transform:translateY(-6px); border-color:rgba(52,230,173,0.35); }
+  .task-thumb{
+    height:180px; position:relative;
+    display:flex; align-items:flex-end;
+    padding:14px;
+  }
+  .task-thumb .price{
+    background:rgba(5,15,11,0.75);
+    backdrop-filter:blur(6px);
+    color:#fff; font-size:13px; font-weight:700;
+    padding:7px 12px; border-radius:var(--radius-full);
+    display:flex; gap:5px; align-items:baseline;
+  }
+  .task-thumb .price b{ color:var(--gold); }
+  .task-thumb .play{
+    position:absolute; top:14px; right:14px;
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.16);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+  }
+  .task-body{ padding:16px 18px 20px; }
+  .task-body .name{ font-weight:700; font-size:15.5px; margin-bottom:6px; }
+  .task-body .meta{ display:flex; justify-content:space-between; align-items:center; color:var(--text-dimmer); font-size:13px; }
+  .thumb-a{ background:linear-gradient(135deg,#2c2a55,#552a4d); }
+  .thumb-b{ background:linear-gradient(135deg,#5c1f3f,#7a1f6e); }
+  .thumb-c{ background:linear-gradient(135deg,#0e5c4b,#0a8f74); }
+
+  /* ---------- how it works ---------- */
+  .steps{ position:relative; }
+  .step-line{
+    position:absolute; left:23px; top:8px; bottom:8px; width:2px;
+    background:repeating-linear-gradient(180deg, rgba(52,230,173,0.4) 0 8px, transparent 8px 16px);
+  }
+  .step{ display:flex; gap:22px; padding:22px 0; position:relative; z-index:1; }
+  .step-num{
+    flex-shrink:0; width:48px; height:48px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg-1); border:1.5px solid var(--teal);
+    color:var(--teal); font-weight:800; font-size:16px;
+    box-shadow:0 0 0 6px var(--bg);
+  }
+  .step-content h3{ margin-bottom:6px; }
+  .step-content p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; max-width:520px; }
+
+  /* ---------- two sides ---------- */
+  .sides-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
+  @media(min-width:840px){ .sides-grid{ grid-template-columns:1fr 1fr; } }
+  .side-card{ display:flex; flex-direction:column; }
+  .side-card .eyebrow{ margin-bottom:10px; }
+  .side-card h3{ font-size:22px; margin-bottom:6px; }
+  .side-card .btn{ margin-top:26px; align-self:flex-start; }
+  .side-card.creators{ border-color:rgba(52,230,173,0.28); }
+
+  /* ---------- report ---------- */
+  .report-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
+  @media(min-width:900px){ .report-grid{ grid-template-columns:1.3fr 1fr; } }
+  .report-list{ list-style:none; }
+  .report-list li{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:16px 0; border-top:1px solid var(--border-soft);
+    color:var(--text-dim); font-size:15px;
+  }
+  .report-list li:last-child{ border-bottom:1px solid var(--border-soft); }
+  .report-list li span.val{ color:#fff; font-weight:700; font-size:17px; }
+  .report-list li.money span.val{ color:var(--gold); font-size:19px; }
+  .report-side{ display:flex; flex-direction:column; gap:18px; }
+  .kpi-card{ text-align:left; }
+  .kpi-card .num{
+    font-size:40px; font-weight:800;
+    background:linear-gradient(100deg, var(--gold), var(--gold-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1;
+  }
+  .kpi-card .cap{ color:var(--text-dim); font-size:14px; margin-top:8px; }
+
+  /* ---------- formats ---------- */
+  .formats-grid{ display:grid; gap:16px; grid-template-columns:1fr; margin-bottom:18px; }
+  @media(min-width:700px){ .formats-grid{ grid-template-columns:1fr 1fr; } }
+  .format-card p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; margin:2px 0 14px; }
+  .format-card .foot{
+    border-top:1px solid var(--border-soft); padding-top:14px;
+    color:var(--teal); font-size:13.5px; font-weight:600; line-height:1.4;
+  }
+  .store-card{ display:grid; gap:22px; grid-template-columns:1fr; align-items:center; }
+  @media(min-width:840px){ .store-card{ grid-template-columns:1.1fr .9fr; } }
+  .store-visual{
+    border-radius:var(--radius-lg);
+    background:
+      radial-gradient(circle at 30% 20%, rgba(52,230,173,0.18), transparent 55%),
+      linear-gradient(160deg, #0e2a20, #081711);
+    border:1px solid var(--border);
+    min-height:220px;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .store-visual .mini-card{
+    width:78%; background:rgba(6,16,12,0.85); border:1px solid var(--border);
+    border-radius:14px; padding:16px; backdrop-filter:blur(8px);
+  }
+  .store-visual .mini-card .row{ display:flex; justify-content:space-between; font-size:13px; color:var(--text-dim); padding:8px 0; border-top:1px solid var(--border-soft); }
+  .store-visual .mini-card .row:first-child{ border-top:none; }
+  .store-visual .mini-card .row b{ color:var(--gold); }
+
+  /* ---------- differences ---------- */
+  .diff-grid{ display:grid; gap:16px; grid-template-columns:1fr; }
+  @media(min-width:840px){ .diff-grid{ grid-template-columns:repeat(3,1fr); } }
+  .diff-card .card-icon{ background:rgba(52,230,173,0.12); }
+  .diff-card p{ color:var(--text-dim); font-size:14px; line-height:1.6; }
+
+  /* ---------- final cta ---------- */
+  .final-cta{
+    text-align:center;
+    padding:64px 26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .final-cta .glow-teal{ bottom:-160px; left:50%; transform:translateX(-60%); animation:float 12s ease-in-out infinite; }
+  .final-cta h2{ margin-bottom:12px; }
+  .final-cta .lead{ max-width:460px; margin:0 auto 34px; }
+  .final-actions{ display:flex; flex-direction:column; align-items:center; gap:12px; max-width:340px; margin:0 auto; }
+  .final-actions .btn{ width:100%; }
+  .final-actions .link-arrow{ margin-top:10px; }
+
+  /* ---------- footer ---------- */
+  footer{ padding:40px 0 0; text-align:center; }
+  footer .logo{ justify-content:center; margin-bottom:10px; }
+  footer .fine{ color:var(--text-dimmer); font-size:13px; padding-bottom:20px; }
+
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:rgba(6,16,12,0.9);
+    backdrop-filter:blur(16px);
+    border-top:1px solid var(--border);
+    display:flex;
+  }
+  .bottom-nav a{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:10px 0 12px; color:var(--text-dimmer); font-size:11.5px; font-weight:600;
+    transition:.2s;
+  }
+  .bottom-nav a.active, .bottom-nav a:hover{ color:var(--teal); }
+  .bottom-nav svg{ width:20px; height:20px; }
+
+  /* ---------- reveal animation ---------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media(min-width:900px){
+    .hero-cta{ margin-bottom:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bottom-nav" aria-hidden="false">
+  <a href="#" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+    Feed
+  </a>
+  <a href="#tasks-section">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4"/><path d="M17 5h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/></svg>
+    Tasks
+  </a>
+  <a href="#store-section">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
+    Store
+  </a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.8-4 5-6 8-6s6.2 2 8 6"/></svg>
+    Profile
+  </a>
+</div>
+
+<header>
+  <div class="header-inner">
+    <nav class="navbar">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+          <path d="M6 4H3a1 1 0 0 0-1 1c0 3 2.5 4.6 4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M18 4h3a1 1 0 0 1 1 1c0 3-2.5 4.6-4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M12 12v4" stroke="#34e6ad" stroke-width="1.6"/>
+          <path d="M8 20h8" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+        </svg>
+        Darebay
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" aria-label="Language">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        </button>
+        <a class="btn btn-outline btn-sm" href="#">Log in</a>
+        <a class="btn btn-fill btn-sm" href="#">Sign up</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow glow-teal"></div>
+    <div class="glow glow-gold"></div>
+    <div class="wrap">
+      <div class="hero-inner reveal in">
+        <span class="badge"><span class="dot"></span>Sales through short videos</span>
+        <h1>Dozens of creators<br>selling <span class="accent">your product</span></h1>
+        <p class="lead">Publish a task and creators from the network film clips about your product on TikTok, Reels and Shorts. Every clip gets its own promo code and link, so you can see which post brings orders. Pay for counted views, for a share of paid orders, or for both — Darebay counts the result and pays the creators itself.</p>
+        <div class="hero-cta">
+          <a href="#" class="btn btn-fill">Launch a task
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#" class="btn btn-outline">Earn from clips</a>
+          <a href="#tasks-section" class="link-arrow">Browse open tasks
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <p class="hero-note">The money for a task sits on the platform before it starts. Creators withdraw with no fee.</p>
+        <div class="stat-row">
+          <div class="stat-pill"><b data-count="3700" data-prefix="$">$0</b>&nbsp;in task pools</div>
+          <div class="stat-pill"><b data-count="1550" data-prefix="$">$0</b>&nbsp;paid out to creators</div>
+          <div class="stat-pill"><b data-count="4960283">0</b>&nbsp;counted views</div>
+          <a href="#tasks-section" class="stat-pill link"><b>6</b>&nbsp;tasks are open
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE MODES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Three modes</div>
+        <h2>Pay for the result you need</h2>
+        <p class="lead" style="margin-top:12px;">These are not different products, but one task with different rewards. Start with one mode and add the second whenever you want.</p>
+      </div>
+
+      <div class="modes-grid">
+        <div class="card mode-card reveal">
+          <h3>For views</h3>
+          <p>You publish a task, creators film clips and post them on their own accounts. You pay for every thousand counted views.</p>
+          <ul class="bullets">
+            <li>A launch in a few minutes</li>
+            <li>You set the budget and the rate</li>
+            <li>The unspent balance comes back</li>
+          </ul>
+        </div>
+        <div class="card mode-card reveal">
+          <h3>For sales</h3>
+          <p>You connect your product to the Darebay storefront. Creators sell it with personal promo codes, and you pay a percentage of paid orders.</p>
+          <ul class="bullets">
+            <li>A code and a link of its own for every clip</li>
+            <li>A percentage only on orders that were not refunded</li>
+            <li>A report down to the order for every post</li>
+          </ul>
+        </div>
+        <div class="card mode-card recommended reveal">
+          <span class="rec-badge">★ We recommend</span>
+          <h3>Hybrid</h3>
+          <p>Views give reach, the percentage gives a reason to sell. One task carries both rewards and a single payout.</p>
+          <ul class="bullets">
+            <li>The fixed fee, views and percentage together</li>
+            <li>Creators take such tasks more readily</li>
+            <li>On other platforms these are two different products</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modes-cta reveal">
+        <a href="#" class="btn btn-fill">See the terms for business
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE CATALOGUE -->
+  <section class="section" id="tasks-section">
+    <div class="wrap">
+      <div class="catalogue-head reveal">
+        <div class="section-head" style="margin-bottom:0;">
+          <div class="eyebrow">Live catalogue</div>
+          <h2>Tasks open right now</h2>
+          <p class="lead" style="margin-top:12px;">Open a card: the terms, the reward and the materials are inside.</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">All tasks</a>
+      </div>
+
+      <div class="task-scroller reveal">
+        <div class="task-card">
+          <div class="task-thumb thumb-a">
+            <span class="price"><b>$0.21</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Домер — Нарезки</div>
+            <div class="meta"><span>1,654,000 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <div class="task-thumb thumb-b">
+            <span class="price"><b>$0.50</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Reaction clips + event</div>
+            <div class="meta"><span>349,100 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <div class="task-thumb thumb-c">
+            <span class="price"><b>$0.50</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Talk about Globi</div>
+            <div class="meta"><span>432,540 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">How it works</div>
+        <h2>From a product to a paid order</h2>
+        <p class="lead" style="margin-top:12px;">One cycle, five steps. All inside the platform, with no message threads or spreadsheets.</p>
+      </div>
+
+      <div class="steps reveal">
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>You connect your product</h3>
+            <p>A digital product and your source material: streams, webinars, podcasts, footage.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>We build the network</h3>
+            <p>We select niche accounts that match your audience, language and region.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Creators publish</h3>
+            <p>TikTok, Reels and Shorts. Every post has its own promo code and its own link.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>People watch and buy</h3>
+            <p>Views are counted after a check, payment goes through Darebay and the buyer receives the product straight away.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>We count and pay</h3>
+            <p>We pay for views as they are counted, and the percentage arrives once an order has outlived the refund window.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO SIDES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Two sides</div>
+        <h2>One platform, two different interests</h2>
+      </div>
+
+      <div class="sides-grid">
+        <div class="card side-card reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
+          </div>
+          <div class="eyebrow">For business</div>
+          <h3>A sales channel instead of a batch of clips</h3>
+          <ul class="bullets">
+            <li>Dozens of independent points of sale instead of one account of your own</li>
+            <li>You see which post brought an order and which brought only views</li>
+            <li>You pay for views, for orders or for both results</li>
+          </ul>
+          <a href="#" class="btn btn-fill">See the terms for business
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="card side-card creators reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M12 18v3"/><path d="m10 9 4 2.5L10 14V9Z" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="eyebrow">For creators &amp; traffic partners</div>
+          <h3>Three sources of income from one post</h3>
+          <ul class="bullets">
+            <li>A fixed fee for every accepted clip</li>
+            <li>Payment for counted views</li>
+            <li>A percentage of the sales you brought in, with no cap</li>
+          </ul>
+          <a href="#" class="btn btn-outline">See the terms for creators</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Report</div>
+        <h2>Every post is visible</h2>
+        <p class="lead" style="margin-top:12px;">Not a monthly summary, but the path the money took from a specific clip.</p>
+      </div>
+
+      <div class="report-grid">
+        <div class="card reveal">
+          <ul class="report-list">
+            <li><span>Posts published</span><span class="val" data-count="42">0</span></li>
+            <li><span>Counted views</span><span class="val" data-count="1280000">0</span></li>
+            <li><span>Clicks</span><span class="val" data-count="9140">0</span></li>
+            <li><span>Paid orders</span><span class="val" data-count="312">0</span></li>
+            <li><span>Refunds</span><span class="val" data-count="11">0</span></li>
+            <li class="money"><span>Net revenue</span><span class="val" data-count="18600" data-prefix="$">$0</span></li>
+          </ul>
+        </div>
+        <div class="report-side">
+          <div class="card kpi-card reveal">
+            <div class="num" data-count="7" data-prefix="$">$0</div>
+            <div class="cap">Cost per buyer</div>
+          </div>
+          <div class="card kpi-card reveal">
+            <div class="num" data-count="4.2" data-suffix="×">0×</div>
+            <div class="cap">Return on spend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATS -->
+  <section class="section" id="store-section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Formats</div>
+        <h2>What you can sell</h2>
+        <p class="lead" style="margin-top:12px;">A sale means different things for different products, so the tasks differ too.</p>
+      </div>
+
+      <div class="formats-grid">
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/></svg>
+          </div>
+          <h3>Digital product</h3>
+          <p>A course, a webinar, templates, a guide, access to materials.</p>
+          <div class="foot">We count a paid order that outlived the refund window</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 20c.2-2.6 2.2-4.6 4.8-4.9"/></svg>
+          </div>
+          <h3>Paid community</h3>
+          <p>A private channel, a club, a subscription to breakdowns.</p>
+          <div class="foot">We count the first payment, the access granted and the renewals</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+          </div>
+          <h3>Mobile app</h3>
+          <p>An app with a subscription.</p>
+          <div class="foot">We count an active paying user, not an install</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+          </div>
+          <h3>Service</h3>
+          <p>A service where the person signs up and pays on their own.</p>
+          <div class="foot">We count a paid invoice</div>
+        </div>
+      </div>
+
+      <div class="card store-card reveal">
+        <div>
+          <div class="eyebrow">Store</div>
+          <h2 style="font-size:clamp(24px,3.4vw,32px);">Products sell in the Darebay store</h2>
+          <p class="lead" style="margin:14px 0 4px;">Every product gets its own page. A buyer arrives from a clip or a promo code, pays on the platform and receives the product right away. The order is tied to the post that brought it.</p>
+          <ul class="bullets">
+            <li>A product page with its own link and promo codes</li>
+            <li>Payment on the platform, delivery right after it</li>
+            <li>Every order shows up in the task report</li>
+          </ul>
+          <a href="#" class="btn btn-fill" style="margin-top:26px;">Open the store
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="store-visual">
+          <div class="mini-card">
+            <div class="row"><span>Order #4821</span><b>$42.00</b></div>
+            <div class="row"><span>Promo code</span><span style="color:#fff;">DOMER21</span></div>
+            <div class="row"><span>Status</span><span style="color:var(--teal);">Delivered</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENCES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Differences</div>
+        <h2>Why this is not the same as ordering clips</h2>
+      </div>
+
+      <div class="diff-grid">
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+          </div>
+          <h3>Views and sales in one task</h3>
+          <p>On other platforms, payment for views and an affiliate program are two different products with separate payouts. Here it is one task card, one payout and one report.</p>
+        </div>
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.2-2.2 2.5-2.2s2.5.8 2.5 2c0 2.2-5 1.6-5 4 0 1.2 1.2 2.2 2.5 2.2s2.5-.8 2.5-2.2"/></svg>
+          </div>
+          <h3>We count what we pay for</h3>
+          <p>Views go through a check for artificial inflation, and only an order that was paid for and not refunded counts as a sale. The word "counted" here means "checked".</p>
+        </div>
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3>A network proven by sales</h3>
+          <p>Creators are ranked not by follower counts but by paid orders they have actually generated — the ones who don't sell simply don't get new tasks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta reveal">
+    <div class="glow glow-teal"></div>
+    <div class="wrap">
+      <h2>Which side are you coming from?</h2>
+      <p class="lead">We sell the product, creators film the clips. Choose your side.</p>
+      <div class="final-actions">
+        <a href="#" class="btn btn-fill btn-block">I have a product
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#" class="btn btn-outline btn-block">I want to film and earn</a>
+        <a href="#tasks-section" class="link-arrow">See the open tasks</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+        <path d="M6 4H3a1 1 0 0 0-1 1c0 3 2.5 4.6 4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M18 4h3a1 1 0 0 1 1 1c0 3-2.5 4.6-4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M12 12v4" stroke="#34e6ad" stroke-width="1.6"/>
+        <path d="M8 20h8" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+      </svg>
+      Darebay
+    </div>
+    <p class="fine">Redesign concept · same structure &amp; palette, refreshed visual layer</p>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
+  revealEls.forEach(el=>io.observe(el));
+
+  // count-up numbers
+  function formatNum(n, opts){
+    const decimals = opts.decimals || 0;
+    let s = n.toLocaleString('en-US', { minimumFractionDigits:decimals, maximumFractionDigits:decimals });
+    return (opts.prefix||'') + s + (opts.suffix||'');
+  }
+  const counters = document.querySelectorAll('[data-count]');
+  const cio = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      cio.unobserve(el);
+      const target = parseFloat(el.getAttribute('data-count'));
+      const prefix = el.getAttribute('data-prefix') || '';
+      const suffix = el.getAttribute('data-suffix') || '';
+      const decimals = target % 1 !== 0 ? 1 : 0;
+      const dur = 1100;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now-start)/dur);
+        const eased = 1 - Math.pow(1-p, 3);
+        el.textContent = formatNum(target*eased, {prefix, suffix, decimals});
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold:.5 });
+  counters.forEach(el=>cio.observe(el));
+</script>
+</body>
+</html>
