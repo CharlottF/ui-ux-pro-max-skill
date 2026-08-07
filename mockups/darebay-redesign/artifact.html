@@ -1,0 +1,1295 @@
+<style>
+  :root{
+    --bg: #050f0b;
+    --bg-1: #081712;
+    --bg-2: #0c1f18;
+    --card: rgba(255,255,255,0.035);
+    --card-hover: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.09);
+    --border-soft: rgba(255,255,255,0.06);
+    --teal: #34e6ad;
+    --teal-2: #1fbf8f;
+    --teal-glow: rgba(52,230,173,0.35);
+    --gold: #f6b93b;
+    --gold-2: #ffcf6e;
+    --text: #f3f7f5;
+    --text-dim: #a9bdb5;
+    --text-dimmer: #6f8880;
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-full: 999px;
+    --maxw: 1180px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-logo: "Segoe Script", "Brush Script MT", "Snell Roundhand", cursive;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font);
+    font-variant-numeric:tabular-nums;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-bottom:78px;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size:26px 26px;
+    opacity:.4;
+    pointer-events:none;
+    z-index:0;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px; position:relative; z-index:1;}
+  @media(min-width:900px){ .wrap{padding:0 40px;} }
+
+  /* ---------- glow blobs ---------- */
+  .glow{position:absolute; border-radius:50%; filter:blur(70px); pointer-events:none; z-index:0;}
+  .glow-teal{background:radial-gradient(circle, var(--teal-glow), transparent 70%); width:520px; height:520px;}
+  .glow-gold{background:radial-gradient(circle, rgba(246,185,59,0.28), transparent 70%); width:420px; height:420px;}
+  @keyframes float{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(-18px,26px) scale(1.06); }
+  }
+  @keyframes float2{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    50%{ transform:translate(20px,-18px) scale(1.04); }
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    padding:14px 0;
+  }
+  .header-inner{
+    max-width:var(--maxw); margin:0 auto; padding:0 16px;
+  }
+  .navbar{
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(8,20,16,0.72);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid var(--border);
+    border-radius:var(--radius-full);
+    padding:9px 10px 9px 18px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.35);
+  }
+  .logo{
+    display:flex; align-items:center; gap:9px;
+    font-family:var(--font-logo);
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#fff;
+  }
+  .logo svg{ width:26px; height:26px; flex-shrink:0; }
+  .nav-actions{ display:flex; align-items:center; gap:8px; }
+  .icon-btn{
+    width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--border);
+    color:var(--teal);
+    background:transparent;
+    transition:.2s;
+  }
+  .icon-btn:hover{ background:var(--card-hover); }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:13px 24px;
+    border-radius:var(--radius-full);
+    font-weight:700; font-size:15px;
+    border:1px solid transparent;
+    white-space:nowrap;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+  }
+  .btn-sm{ padding:10px 18px; font-size:14px; }
+  .btn-fill{
+    background:linear-gradient(135deg, var(--teal), var(--teal-2));
+    color:#04150f;
+    box-shadow:0 6px 24px -6px var(--teal-glow);
+  }
+  .btn-fill:hover{ transform:translateY(-2px); box-shadow:0 10px 32px -6px var(--teal-glow); }
+  .btn-fill:active{ transform:translateY(0); }
+  .btn-outline{
+    border-color:rgba(255,255,255,0.22);
+    color:#fff;
+    background:rgba(255,255,255,0.02);
+  }
+  .btn-outline:hover{ background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.35); }
+  .btn-block{ width:100%; }
+  .link-arrow{
+    display:inline-flex; align-items:center; gap:6px;
+    color:var(--text-dim); font-weight:600; font-size:14.5px;
+    border-bottom:1px solid rgba(255,255,255,0.18);
+    padding-bottom:2px;
+    transition:.2s;
+  }
+  .link-arrow:hover{ color:#fff; border-color:#fff; }
+  .link-arrow svg{ transition:transform .2s; }
+  .link-arrow:hover svg{ transform:translateX(3px); }
+
+  /* ---------- badges / eyebrows ---------- */
+  .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1px solid rgba(52,230,173,0.35);
+    color:var(--teal);
+    background:rgba(52,230,173,0.06);
+    padding:8px 16px;
+    border-radius:var(--radius-full);
+    font-size:13.5px; font-weight:600;
+  }
+  .badge .dot{ width:6px; height:6px; border-radius:50%; border:1.5px solid var(--teal); }
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    color:var(--teal);
+    font-size:12.5px; font-weight:800;
+    letter-spacing:2px; text-transform:uppercase;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--teal); border-radius:2px; }
+
+  h1,h2,h3{ font-weight:800; letter-spacing:-0.02em; color:#fff; line-height:1.08; }
+  h1{ font-size:clamp(34px,6vw,58px); }
+  h2{ font-size:clamp(28px,4.4vw,42px); }
+  h3{ font-size:19px; }
+  .lead{ color:var(--text-dim); font-size:17px; line-height:1.6; }
+  .section{ padding:76px 0; position:relative; }
+  .section-head{ max-width:640px; margin-bottom:44px; }
+  .section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:56px 0 40px; position:relative; overflow:hidden; }
+  .hero .glow-teal{ top:-160px; left:-140px; animation:float 14s ease-in-out infinite; }
+  .hero .glow-gold{ top:60px; right:-160px; animation:float2 16s ease-in-out infinite; }
+  .hero-grid{ display:grid; grid-template-columns:1fr; gap:40px; align-items:center; }
+  @media(min-width:980px){ .hero-grid{ grid-template-columns:1.05fr .95fr; gap:32px; } }
+  .hero-inner{ max-width:760px; }
+  .hero .badge{ margin-bottom:24px; }
+  .hero h1{ margin-bottom:20px; }
+  .hero h1 .accent{
+    background:linear-gradient(100deg, var(--teal), var(--gold-2) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero .lead{ max-width:600px; margin-bottom:32px; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin-bottom:18px; }
+  .hero-note{ color:var(--text-dimmer); font-size:14px; margin:18px 0 26px; max-width:480px; }
+
+  .stat-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .stat-pill{
+    display:flex; align-items:baseline; gap:6px;
+    background:var(--card);
+    border:1px solid var(--border-soft);
+    padding:11px 18px;
+    border-radius:var(--radius-full);
+    font-size:14px; color:var(--text-dim);
+    transition:.2s;
+  }
+  .stat-pill:hover{ background:var(--card-hover); transform:translateY(-2px); }
+  .stat-pill b{ color:var(--gold); font-size:15.5px; font-weight:800; }
+  .stat-pill.link{ color:var(--teal); border-color:rgba(52,230,173,0.3); }
+  .stat-pill.link b{ color:var(--teal); }
+
+  /* ---------- screenshot placeholder frames ---------- */
+  .hero-visual{ position:relative; display:flex; justify-content:center; }
+  .visual-stage{ position:relative; padding:34px 30px 10px; }
+  .shot-slot{
+    border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    border:1.5px dashed rgba(255,255,255,0.16);
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 10px, transparent 10px 20px);
+    color:var(--text-dimmer);
+    text-align:center; padding:16px;
+  }
+  .shot-slot svg{ color:var(--teal); opacity:.7; }
+  .shot-slot .lbl{ font-size:13px; font-weight:600; color:var(--text-dim); }
+  .shot-slot .sub{ font-size:11.5px; }
+  .task-card.shot-card{ background:linear-gradient(180deg, var(--bg-2), var(--bg-1)); }
+  .task-card.shot-card .task-thumb{ height:180px; align-items:center; justify-content:center; padding:0; }
+  .task-card.shot-card .shot-slot{ width:calc(100% - 24px); height:calc(100% - 24px); margin:0; aspect-ratio:auto; }
+
+  /* ---------- hero clip mockup ---------- */
+  .clip-frame{
+    width:236px; aspect-ratio:9/17.6;
+    border-radius:32px;
+    border:7px solid var(--bg-1);
+    background:linear-gradient(165deg, var(--bg-2), #061510);
+    position:relative; overflow:hidden;
+    box-shadow:0 40px 80px -22px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.03);
+    transform:rotate(-2deg);
+    transition:transform .4s ease;
+  }
+  .clip-frame:hover{ transform:rotate(0deg) translateY(-4px); }
+  .clip-frame .clip-slot{ position:absolute; inset:22px 10px 68px; margin:0; }
+  .clip-frame .scrubber{ position:absolute; top:14px; left:14px; right:14px; height:3px; border-radius:3px; background:rgba(255,255,255,0.18); }
+  .clip-frame .scrubber .fill{ position:absolute; left:0; top:0; bottom:0; width:38%; background:var(--teal); border-radius:3px; }
+  .clip-frame .scrubber .head{ position:absolute; left:38%; top:50%; width:9px; height:9px; margin:-4.5px 0 0 -4.5px; border-radius:50%; background:#fff; box-shadow:0 0 0 3px rgba(52,230,173,0.35); }
+  .clip-frame .clip-rail{ position:absolute; right:10px; bottom:78px; display:flex; flex-direction:column; gap:12px; align-items:center; }
+  .clip-frame .clip-rail .ic{
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(8,20,16,0.55); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .clip-frame .clip-caption{ position:absolute; left:14px; right:14px; bottom:14px; }
+  .clip-frame .code-chip{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(5,15,11,0.8); border:1px solid rgba(52,230,173,0.35);
+    color:var(--teal); font-size:11px; font-weight:800; letter-spacing:.4px;
+    padding:6px 10px; border-radius:999px; margin-bottom:7px;
+  }
+  .clip-frame .views-line{ color:rgba(255,255,255,0.75); font-size:11.5px; }
+  .float-chip{
+    position:absolute; display:flex; align-items:center; gap:7px;
+    background:var(--bg-2); border:1px solid var(--border);
+    padding:9px 14px; border-radius:999px;
+    font-size:12.5px; font-weight:600; color:var(--text-dim);
+    box-shadow:0 16px 30px -14px rgba(0,0,0,0.6);
+  }
+  .float-chip svg{ color:var(--teal); flex-shrink:0; }
+  .float-chip.chip-a{ top:2px; left:-8px; transform:rotate(-4deg); z-index:3; }
+  @media(max-width:539px){ .float-chip.chip-a{ left:50%; transform:translateX(-50%) rotate(-2deg); } }
+  .float-chip.chip-b{ top:56%; left:-30px; transform:rotate(5deg); z-index:3; }
+  @media(max-width:539px){ .float-chip.chip-b{ display:none; } }
+  .stack-ghost{
+    position:absolute; top:34px; left:50%; width:236px; aspect-ratio:9/17.6;
+    border-radius:32px; border:1px solid var(--border);
+    background:linear-gradient(165deg, var(--bg-2), var(--bg-1));
+  }
+  .stack-ghost.g1{ transform:translateX(-50%) rotate(6deg) translate(64px, 10px); opacity:.55; z-index:0; }
+  .stack-ghost.g2{ transform:translateX(-50%) rotate(-9deg) translate(-58px, 16px); opacity:.4; z-index:0; }
+  .clip-frame{ z-index:1; }
+
+  /* ---------- mascot ---------- */
+  .mascot{ position:absolute; z-index:2; filter:drop-shadow(0 10px 18px rgba(0,0,0,0.45)); }
+  .mascot .bob{ animation:mascot-bob 3.2s ease-in-out infinite; transform-origin:50% 100%; }
+  .mascot .arm-l{ transform-origin:20px 34px; animation:wave-l 2.6s ease-in-out infinite; }
+  .mascot .arm-r{ transform-origin:80px 34px; animation:wave-r 2.6s ease-in-out infinite; }
+  .mascot .spark{ animation:twinkle 1.8s ease-in-out infinite; transform-origin:center; }
+  .mascot .spark:nth-child(2){ animation-delay:.3s; }
+  .mascot .spark:nth-child(3){ animation-delay:.6s; }
+  @keyframes mascot-bob{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-8px) rotate(2deg); }
+  }
+  @keyframes wave-l{
+    0%,100%{ transform:rotate(0deg); }
+    50%{ transform:rotate(-8deg); }
+  }
+  @keyframes wave-r{
+    0%,20%{ transform:rotate(0deg); }
+    35%{ transform:rotate(22deg); }
+    50%{ transform:rotate(4deg); }
+    65%{ transform:rotate(22deg); }
+    100%{ transform:rotate(0deg); }
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.2; transform:scale(.7); }
+    50%{ opacity:1; transform:scale(1); }
+  }
+  .mascot-hero{ width:88px; right:-8px; bottom:-4px; }
+  .mascot-cta{ position:relative; width:96px; margin:0 auto 6px; }
+  @media(prefers-reduced-motion:reduce){
+    .mascot .bob, .mascot .arm-l, .mascot .arm-r, .mascot .spark{ animation:none; }
+  }
+
+  /* ---------- cards generic ---------- */
+  .card{
+    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--border);
+    border-radius:var(--radius-xl);
+    padding:30px;
+    position:relative;
+    overflow:hidden;
+    transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size:20px 20px;
+    -webkit-mask-image:linear-gradient(180deg, rgba(0,0,0,.5), transparent 65%);
+    mask-image:linear-gradient(180deg, rgba(0,0,0,.5), transparent 65%);
+    pointer-events:none;
+  }
+  .card > *{ position:relative; z-index:1; }
+  .card:hover{ transform:translateY(-5px); border-color:rgba(52,230,173,0.32); box-shadow:0 24px 50px -28px rgba(0,0,0,0.7); }
+  .card-icon{
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 32% 28%, rgba(52,230,173,0.22), rgba(52,230,173,0.05));
+    border:1px solid rgba(52,230,173,0.28);
+    box-shadow:0 0 0 4px rgba(52,230,173,0.05);
+    color:var(--teal);
+    margin-bottom:18px;
+  }
+  .bullets{ list-style:none; margin-top:16px; }
+  .bullets li{
+    display:flex; gap:10px;
+    padding:13px 0;
+    border-top:1px solid var(--border-soft);
+    color:var(--text-dim); font-size:14.5px; line-height:1.5;
+  }
+  .bullets li::before{ content:"–"; color:var(--teal); font-weight:800; flex-shrink:0; }
+
+  /* ---------- three modes ---------- */
+  .modes-equation{ display:flex; flex-direction:column; gap:16px; align-items:stretch; }
+  @media(min-width:900px){ .modes-equation{ flex-direction:row; align-items:center; gap:14px; } }
+  .modes-equation .mode-card{ flex:1; }
+  .eq-symbol{
+    align-self:center; flex-shrink:0;
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--teal); font-size:19px; font-weight:800;
+    background:var(--bg-1); border:1px solid var(--border);
+  }
+  .mode-card p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; margin-top:8px; }
+  .mode-card.recommended{
+    border:1px solid rgba(52,230,173,0.5);
+    background:linear-gradient(180deg, rgba(52,230,173,0.08), var(--bg-1));
+    box-shadow:0 0 0 1px rgba(52,230,173,0.08), 0 20px 50px -20px var(--teal-glow);
+  }
+  @media(min-width:900px){ .mode-card.recommended{ flex:1.14; transform:scale(1.045); } }
+  .mode-card.recommended:hover{ transform:translateY(-5px); }
+  @media(min-width:900px){ .mode-card.recommended:hover{ transform:scale(1.045) translateY(-5px); } }
+  .rec-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(52,230,173,0.14); color:var(--teal);
+    border:1px solid rgba(52,230,173,0.4);
+    font-size:11.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase;
+    padding:6px 12px; border-radius:var(--radius-full);
+    margin-bottom:14px;
+  }
+  .modes-cta{ margin-top:30px; display:flex; }
+
+  /* ---------- catalogue ---------- */
+  .catalogue-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  .task-scroller{
+    display:flex; gap:18px; overflow-x:auto; padding:8px 2px 20px;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+  }
+  .task-scroller::-webkit-scrollbar{ height:6px; }
+  .task-scroller::-webkit-scrollbar-thumb{ background:var(--border); border-radius:10px; }
+  .task-card{
+    flex:0 0 260px; scroll-snap-align:start;
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:var(--bg-1);
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .task-card:hover{ transform:translateY(-6px); border-color:rgba(52,230,173,0.35); }
+  .task-thumb{
+    height:180px; position:relative;
+    display:flex; align-items:flex-end;
+    padding:14px;
+  }
+  .task-thumb .price{
+    background:rgba(5,15,11,0.75);
+    backdrop-filter:blur(6px);
+    color:#fff; font-size:13px; font-weight:700;
+    padding:7px 12px; border-radius:var(--radius-full);
+    display:flex; gap:5px; align-items:baseline;
+  }
+  .task-thumb .price b{ color:var(--gold); }
+  .task-thumb .play{
+    position:absolute; top:14px; right:14px;
+    width:34px; height:34px; border-radius:50%;
+    background:rgba(255,255,255,0.16);
+    backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+  }
+  .task-body{ padding:16px 18px 20px; }
+  .task-body .name{ font-weight:700; font-size:15.5px; margin-bottom:6px; }
+  .task-body .meta{ display:flex; justify-content:space-between; align-items:center; color:var(--text-dimmer); font-size:13px; }
+  .thumb-a{ background:linear-gradient(135deg,#2c2a55,#552a4d); }
+  .thumb-b{ background:linear-gradient(135deg,#5c1f3f,#7a1f6e); }
+  .thumb-c{ background:linear-gradient(135deg,#0e5c4b,#0a8f74); }
+
+  /* ---------- how it works ---------- */
+  .steps{ position:relative; }
+  .step-line{
+    position:absolute; left:23px; top:8px; bottom:8px; width:2px;
+    background:repeating-linear-gradient(180deg, rgba(52,230,173,0.4) 0 8px, transparent 8px 16px);
+  }
+  .step{ display:flex; gap:22px; padding:22px 0; position:relative; z-index:1; }
+  .step-num{
+    flex-shrink:0; width:48px; height:48px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg-1); border:1.5px solid var(--teal);
+    color:var(--teal); font-weight:800; font-size:16px;
+    box-shadow:0 0 0 6px var(--bg);
+  }
+  .step-content h3{ margin-bottom:6px; }
+  .step-content p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; max-width:520px; }
+  .step-visual{ display:none; flex-shrink:0; width:150px; height:150px; margin-left:auto; }
+  @media(min-width:860px){ .step-visual{ display:block; } }
+  .step-visual .hub{ fill:var(--bg-1); stroke:var(--teal); stroke-width:1.6; }
+  .step-visual .spoke{ stroke:rgba(52,230,173,0.3); stroke-width:1.4; }
+  .step-visual .node{ fill:var(--bg-1); stroke:rgba(255,255,255,0.16); stroke-width:1.4; }
+  .step-visual .node.match{ stroke:var(--teal); }
+  .step-visual .dot{ fill:var(--text-dimmer); }
+  .step-visual .dot.match{ fill:var(--teal); }
+
+  /* ---------- two sides ---------- */
+  .split-card{
+    display:flex; flex-direction:column;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0),
+      linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    background-size:20px 20px, 100% 100%;
+    border:1px solid var(--border); border-radius:var(--radius-xl);
+    overflow:hidden; position:relative;
+  }
+  @media(min-width:840px){ .split-card{ flex-direction:row; align-items:stretch; } }
+  .split-half{ display:flex; flex-direction:column; padding:34px; flex:1; }
+  .split-half .eyebrow{ margin-bottom:10px; }
+  .split-half h3{ font-size:22px; margin-bottom:6px; }
+  .split-half .btn{ margin-top:26px; align-self:flex-start; }
+  .split-mid{ display:flex; align-items:center; justify-content:center; padding:0 34px 24px; }
+  @media(min-width:840px){ .split-mid{ flex-direction:column; padding:34px 0; } }
+  .split-mid::before, .split-mid::after{ content:""; flex:1; background:var(--border-soft); }
+  .split-mid::before, .split-mid::after{ height:1px; }
+  @media(min-width:840px){ .split-mid::before, .split-mid::after{ height:auto; width:1px; } }
+  .split-emblem{
+    flex-shrink:0; width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(52,230,173,0.08); border:1px solid rgba(52,230,173,0.32);
+    color:var(--teal); margin:0 12px;
+  }
+  @media(min-width:840px){ .split-emblem{ margin:12px 0; } }
+
+  /* ---------- report (receipt) ---------- */
+  .report-grid{ display:grid; gap:18px; grid-template-columns:1fr; }
+  @media(min-width:900px){ .report-grid{ grid-template-columns:1.3fr 1fr; } }
+  .receipt{
+    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--border); border-radius:18px 18px 0 0;
+    padding:28px 28px 40px;
+    font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    clip-path:polygon(0% 0%,100% 0%,100% 92%,95% 100%,90% 92%,85% 100%,80% 92%,75% 100%,70% 92%,65% 100%,60% 92%,55% 100%,50% 92%,45% 100%,40% 92%,35% 100%,30% 92%,25% 100%,20% 92%,15% 100%,10% 92%,5% 100%,0% 92%);
+  }
+  .receipt-head{ display:flex; align-items:center; gap:9px; padding-bottom:16px; border-bottom:1px dashed var(--border); }
+  .receipt-head svg{ color:var(--teal); flex-shrink:0; }
+  .receipt-head b{ font-family:var(--font); letter-spacing:1.5px; font-size:13px; }
+  .receipt-head span{ color:var(--text-dimmer); font-size:11.5px; }
+  .receipt-ref{ color:var(--text-dimmer); font-size:12px; padding:14px 0 4px; }
+  .report-list{ list-style:none; }
+  .report-list li{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:13px 0; border-top:1px dashed var(--border-soft);
+    color:var(--text-dim); font-size:14px;
+  }
+  .report-list li span.val{ color:#fff; font-weight:700; font-size:15.5px; }
+  .report-list li.money{ border-top:1px solid var(--border); margin-top:4px; padding-top:17px; }
+  .report-list li.money span.val{ color:var(--gold); font-size:19px; }
+  .receipt-barcode{
+    height:32px; margin-top:18px;
+    background:repeating-linear-gradient(90deg, rgba(255,255,255,0.5) 0 2px, transparent 2px 4px, rgba(255,255,255,0.28) 4px 5px, transparent 5px 9px, rgba(255,255,255,0.5) 9px 10px, transparent 10px 14px);
+    opacity:.4;
+  }
+  .report-side{ display:flex; flex-direction:column; gap:18px; }
+  .kpi-card{ text-align:left; position:relative; }
+  .kpi-card::before, .kpi-card::after{
+    content:""; position:absolute; left:-1px; width:14px; height:14px;
+    background:var(--bg); border-radius:50%; border:1px solid var(--border);
+  }
+  .kpi-card::before{ top:-7px; } .kpi-card::after{ bottom:-7px; }
+  .kpi-card .num{
+    font-size:40px; font-weight:800;
+    background:linear-gradient(100deg, var(--gold), var(--gold-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1;
+  }
+  .kpi-card .cap{ color:var(--text-dim); font-size:14px; margin-top:8px; }
+
+  /* ---------- formats ---------- */
+  .formats-grid{ display:grid; gap:16px; grid-template-columns:1fr; margin-bottom:18px; }
+  @media(min-width:700px){ .formats-grid{ grid-template-columns:1fr 1fr; } }
+  .format-card p{ color:var(--text-dim); font-size:14.5px; line-height:1.55; margin:2px 0 14px; }
+  .format-card .foot{
+    border-top:1px solid var(--border-soft); padding-top:14px;
+    color:var(--teal); font-size:13.5px; font-weight:600; line-height:1.4;
+  }
+  .store-card{ display:grid; gap:22px; grid-template-columns:1fr; align-items:center; }
+  @media(min-width:840px){ .store-card{ grid-template-columns:1.1fr .9fr; } }
+  .store-visual{
+    border-radius:var(--radius-lg);
+    background:
+      radial-gradient(circle at 30% 20%, rgba(52,230,173,0.18), transparent 55%),
+      linear-gradient(160deg, #0e2a20, #081711);
+    border:1px solid var(--border);
+    min-height:250px;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:visible;
+    padding:26px 0;
+  }
+  .store-visual .mini-card{
+    width:76%; background:rgba(6,16,12,0.9); border:1px solid var(--border);
+    border-radius:14px; padding:16px; backdrop-filter:blur(8px);
+    box-shadow:0 24px 46px -18px rgba(0,0,0,0.7);
+    transition:transform .35s ease;
+  }
+  .store-visual:hover .mini-card{ transform:translateY(-3px); }
+  .store-visual .mini-card.back{
+    position:absolute; width:66%; opacity:.7;
+    transform:rotate(-9deg) translate(-38%, -4px);
+    z-index:0;
+  }
+  .store-visual .mini-card.front{
+    position:relative; transform:rotate(3deg);
+    z-index:1;
+  }
+  .store-visual:hover .mini-card.front{ transform:rotate(3deg) translateY(-4px); }
+  .store-visual .mini-card .cap{ font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dimmer); margin-bottom:8px; }
+  .store-visual .mini-card .row{ display:flex; justify-content:space-between; font-size:13px; color:var(--text-dim); padding:8px 0; border-top:1px solid var(--border-soft); }
+  .store-visual .mini-card .row:first-child{ border-top:none; }
+  .store-visual .mini-card .row b{ color:var(--gold); }
+
+  /* ---------- differences ---------- */
+  .diff-grid{ display:grid; gap:16px; grid-template-columns:1fr; }
+  @media(min-width:840px){ .diff-grid{ grid-template-columns:repeat(3,1fr); } }
+  .diff-card .card-icon{ background:rgba(52,230,173,0.12); }
+  .diff-card p{ color:var(--text-dim); font-size:14px; line-height:1.6; }
+
+  /* ---------- closing panel (final cta + footer) ---------- */
+  .closing{ padding:20px 0 50px; }
+  .closing-panel{
+    background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+    border:1px solid var(--border); border-radius:var(--radius-xl);
+    padding:26px 20px 34px;
+    position:relative; overflow:hidden;
+  }
+  @media(min-width:720px){ .closing-panel{ padding:34px 40px 46px; } }
+  .closing-panel .glow-teal{ bottom:-200px; left:50%; transform:translateX(-55%); animation:float 12s ease-in-out infinite; }
+  .closing-topbar{
+    position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .closing-links{ display:flex; gap:24px; font-size:13.5px; color:var(--text-dim); font-weight:600; }
+  .closing-links a:hover{ color:#fff; }
+  @media(max-width:680px){ .closing-links{ display:none; } }
+  .closing-ghost-wrap{
+    position:relative; min-height:150px;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:34px 0 6px;
+  }
+  @media(min-width:720px){ .closing-ghost-wrap{ min-height:220px; padding:50px 0 10px; } }
+  .closing-ghost{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:clamp(58px,16vw,168px); font-weight:800; letter-spacing:-0.02em;
+    color:transparent; -webkit-text-stroke:1.5px rgba(255,255,255,0.09);
+    white-space:nowrap; pointer-events:none; user-select:none; z-index:0;
+  }
+  .closing-headline{ position:relative; z-index:1; max-width:640px; }
+  .closing-headline h2{ font-size:clamp(28px,5.6vw,48px); margin-bottom:12px; }
+  .closing-headline .lead{ max-width:440px; margin:0 auto; }
+  .closing-pill{
+    position:absolute; z-index:2;
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--bg-1); border:1px solid var(--border);
+    padding:8px 14px; border-radius:999px;
+    font-size:12px; font-weight:600; color:var(--text-dim);
+    box-shadow:0 14px 26px -12px rgba(0,0,0,0.6);
+    white-space:nowrap;
+  }
+  .closing-pill b{ color:var(--gold); }
+  .closing-pill.p1{ top:2px; left:2%; transform:rotate(-6deg); }
+  .closing-pill.p2{ bottom:6px; right:1%; transform:rotate(5deg); }
+  .closing-pill.p3{ top:44%; left:-1%; transform:rotate(-3deg); color:var(--teal); border-color:rgba(52,230,173,0.3); }
+  @media(max-width:720px){ .closing-pill{ display:none; } }
+  @media(max-width:1060px){ .closing-pill.p3{ display:none; } }
+  .final-actions{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:12px; max-width:340px; margin:26px auto 0; }
+  .final-actions .btn{ width:100%; }
+  .final-actions .link-arrow{ margin-top:10px; }
+
+  /* ---------- footer ---------- */
+  footer{ padding:22px 0 0; text-align:center; }
+  footer .fine{ color:var(--text-dimmer); font-size:13px; padding-bottom:20px; }
+
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; z-index:60;
+    background:rgba(6,16,12,0.9);
+    backdrop-filter:blur(16px);
+    border-top:1px solid var(--border);
+    display:flex;
+  }
+  .bottom-nav a{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:10px 0 12px; color:var(--text-dimmer); font-size:11.5px; font-weight:600;
+    transition:.2s;
+  }
+  .bottom-nav a.active, .bottom-nav a:hover{ color:var(--teal); }
+  .bottom-nav svg{ width:20px; height:20px; }
+
+  /* ---------- reveal animation ---------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media(min-width:900px){
+    .hero-cta{ margin-bottom:22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bottom-nav" aria-hidden="false">
+  <a href="#" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+    Feed
+  </a>
+  <a href="#tasks-section">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1 4 4 0 0 0 4 4"/><path d="M17 5h3a1 1 0 0 1 1 1 4 4 0 0 1-4 4"/></svg>
+    Tasks
+  </a>
+  <a href="#store-section">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
+    Store
+  </a>
+  <a href="#">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.8-4 5-6 8-6s6.2 2 8 6"/></svg>
+    Profile
+  </a>
+</div>
+
+<header>
+  <div class="header-inner">
+    <nav class="navbar">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+          <path d="M6 4H3a1 1 0 0 0-1 1c0 3 2.5 4.6 4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M18 4h3a1 1 0 0 1 1 1c0 3-2.5 4.6-4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M12 12v4" stroke="#34e6ad" stroke-width="1.6"/>
+          <path d="M8 20h8" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+        </svg>
+        Darebay
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" aria-label="Language">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        </button>
+        <a class="btn btn-outline btn-sm" href="#">Log in</a>
+        <a class="btn btn-fill btn-sm" href="#">Sign up</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow glow-teal"></div>
+    <div class="glow glow-gold"></div>
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-inner reveal in">
+          <span class="badge"><span class="dot"></span>Sales through short videos</span>
+          <h1>Dozens of creators<br>selling <span class="accent">your product</span></h1>
+          <p class="lead">Publish a task and creators from the network film clips about your product on TikTok, Reels and Shorts. Every clip gets its own promo code and link, so you can see which post brings orders. Pay for counted views, for a share of paid orders, or for both — Darebay counts the result and pays the creators itself.</p>
+          <div class="hero-cta">
+            <a href="#" class="btn btn-fill">Launch a task
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#" class="btn btn-outline">Earn from clips</a>
+            <a href="#tasks-section" class="link-arrow">Browse open tasks
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <p class="hero-note">The money for a task sits on the platform before it starts. Creators withdraw with no fee.</p>
+          <div class="stat-row">
+            <div class="stat-pill"><b data-count="3700" data-prefix="$">$0</b>&nbsp;in task pools</div>
+            <div class="stat-pill"><b data-count="1550" data-prefix="$">$0</b>&nbsp;paid out to creators</div>
+            <div class="stat-pill"><b data-count="4960283">0</b>&nbsp;counted views</div>
+            <a href="#tasks-section" class="stat-pill link"><b>6</b>&nbsp;tasks are open
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal in">
+          <div class="visual-stage">
+            <div class="stack-ghost g1"></div>
+            <div class="stack-ghost g2"></div>
+            <div class="float-chip chip-a">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+              Verified, not inflated
+            </div>
+            <div class="float-chip chip-b">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-4Z"/></svg>
+              No refund, no payout
+            </div>
+            <div class="clip-frame">
+              <div class="shot-slot clip-slot">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+                <div class="lbl">Your clip here</div>
+                <div class="sub">Paste a TikTok / Reels capture</div>
+              </div>
+              <div class="scrubber"><span class="fill"></span><span class="head"></span></div>
+              <div class="clip-rail">
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4.5c2 0 3.5 1 6.4 4 2.9-3 4.4-4 6.4-4C21.9 4.5 23.6 8 22 11.7 19.5 16.4 12 21 12 21Z"/></svg></span>
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 9 9 0 0 1-3.6-.7L3 21l1.8-5.4A8.4 8.4 0 0 1 3.5 11 8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span>
+                <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v14"/></svg></span>
+              </div>
+              <div class="clip-caption">
+                <span class="code-chip">CODE · DOMER21</span>
+                <div class="views-line">128.4K views · counted</div>
+              </div>
+            </div>
+            <div class="mascot mascot-hero" aria-hidden="true">
+              <svg viewBox="0 0 100 90" width="88" height="79" fill="none">
+                <g class="bob">
+                  <ellipse cx="50" cy="82" rx="20" ry="4" fill="rgba(0,0,0,0.35)"/>
+                  <path class="arm-l" d="M20 34 Q4 40 8 54" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle class="arm-l" cx="8" cy="54" r="4.5" fill="#1fbf8f"/>
+                  <path class="arm-r" d="M80 34 Q97 22 92 8" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle class="arm-r" cx="92" cy="8" r="4.5" fill="#1fbf8f"/>
+                  <rect x="36" y="64" width="28" height="10" rx="3" fill="#0c8a68"/>
+                  <rect x="46" y="56" width="8" height="10" fill="#17a67d"/>
+                  <path d="M28 26h44a4 4 0 0 1 4 4c0 22-12 38-28 38S20 52 20 30a4 4 0 0 1 4-4Z" fill="#34e6ad"/>
+                  <circle cx="40" cy="42" r="3" fill="#04150f"/>
+                  <circle cx="60" cy="42" r="3" fill="#04150f"/>
+                  <path d="M40 50 Q50 57 60 50" stroke="#04150f" stroke-width="3" stroke-linecap="round" fill="none"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE MODES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Three modes</div>
+        <h2>Pay for the result you need</h2>
+        <p class="lead" style="margin-top:12px;">These are not different products, but one task with different rewards. Start with one mode and add the second whenever you want.</p>
+      </div>
+
+      <div class="modes-equation">
+        <div class="card mode-card reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <h3>For views</h3>
+          <p>You publish a task, creators film clips and post them on their own accounts. You pay for every thousand counted views.</p>
+          <ul class="bullets">
+            <li>A launch in a few minutes</li>
+            <li>You set the budget and the rate</li>
+            <li>The unspent balance comes back</li>
+          </ul>
+        </div>
+
+        <div class="eq-symbol reveal">+</div>
+
+        <div class="card mode-card reveal">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19M8 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0Zm12 8a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z"/></svg>
+          </div>
+          <h3>For sales</h3>
+          <p>You connect your product to the Darebay storefront. Creators sell it with personal promo codes, and you pay a percentage of paid orders.</p>
+          <ul class="bullets">
+            <li>A code and a link of its own for every clip</li>
+            <li>A percentage only on orders that were not refunded</li>
+            <li>A report down to the order for every post</li>
+          </ul>
+        </div>
+
+        <div class="eq-symbol reveal">=</div>
+
+        <div class="card mode-card recommended reveal">
+          <span class="rec-badge">★ We recommend</span>
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-4Z"/></svg>
+          </div>
+          <h3>Hybrid</h3>
+          <p>Views give reach, the percentage gives a reason to sell. One task carries both rewards and a single payout.</p>
+          <ul class="bullets">
+            <li>The fixed fee, views and percentage together</li>
+            <li>Creators take such tasks more readily</li>
+            <li>On other platforms these are two different products</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modes-cta reveal">
+        <a href="#" class="btn btn-fill">See the terms for business
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE CATALOGUE -->
+  <section class="section" id="tasks-section">
+    <div class="wrap">
+      <div class="catalogue-head reveal">
+        <div class="section-head" style="margin-bottom:0;">
+          <div class="eyebrow">Live catalogue</div>
+          <h2>Tasks open right now</h2>
+          <p class="lead" style="margin-top:12px;">Open a card: the terms, the reward and the materials are inside.</p>
+        </div>
+        <a href="#" class="btn btn-outline btn-sm">All tasks</a>
+      </div>
+
+      <div class="task-scroller reveal">
+        <div class="task-card shot-card">
+          <div class="task-thumb">
+            <div class="shot-slot">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+              <div class="lbl">Your task card</div>
+              <div class="sub">Swap in a real clip thumbnail</div>
+            </div>
+          </div>
+          <div class="task-body">
+            <div class="name">Add your task</div>
+            <div class="meta"><span>Launch to fill this slot</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <div class="task-thumb thumb-a">
+            <span class="price"><b>$0.21</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Домер — Нарезки</div>
+            <div class="meta"><span>1,654,000 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <div class="task-thumb thumb-b">
+            <span class="price"><b>$0.50</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Reaction clips + event</div>
+            <div class="meta"><span>349,100 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="task-card">
+          <div class="task-thumb thumb-c">
+            <span class="price"><b>$0.50</b>per 1,000 views</span>
+            <span class="play">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+            </span>
+          </div>
+          <div class="task-body">
+            <div class="name">Talk about Globi</div>
+            <div class="meta"><span>432,540 counted views</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">How it works</div>
+        <h2>From a product to a paid order</h2>
+        <p class="lead" style="margin-top:12px;">One cycle, five steps. All inside the platform, with no message threads or spreadsheets.</p>
+      </div>
+
+      <div class="steps reveal">
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>You connect your product</h3>
+            <p>A digital product and your source material: streams, webinars, podcasts, footage.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>We build the network</h3>
+            <p>We select niche accounts that match your audience, language and region.</p>
+          </div>
+          <svg class="step-visual" viewBox="0 0 150 150" fill="none" aria-hidden="true">
+            <line class="spoke" x1="75" y1="75" x2="75" y2="20"/>
+            <line class="spoke" x1="75" y1="75" x2="127" y2="58"/>
+            <line class="spoke" x1="75" y1="75" x2="107" y2="120"/>
+            <line class="spoke" x1="75" y1="75" x2="43" y2="120"/>
+            <line class="spoke" x1="75" y1="75" x2="23" y2="58"/>
+            <circle class="hub" cx="75" cy="75" r="20"/>
+            <path d="M67 69h-4a1 1 0 0 0-1 1c0 3 2 4.6 4.5 5" stroke="#34e6ad" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M83 69h4a1 1 0 0 1 1 1c0 3-2 4.6-4.5 5" stroke="#34e6ad" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M67 68h16v3.5a8 8 0 0 1-16 0V68Z" fill="rgba(52,230,173,0.16)" stroke="#34e6ad" stroke-width="1.2"/>
+            <circle class="node match" cx="75" cy="20" r="11"/><circle class="dot match" cx="75" cy="20" r="3.4"/>
+            <circle class="node match" cx="127" cy="58" r="11"/><circle class="dot match" cx="127" cy="58" r="3.4"/>
+            <circle class="node" cx="107" cy="120" r="11"/><circle class="dot" cx="107" cy="120" r="3.4"/>
+            <circle class="node match" cx="43" cy="120" r="11"/><circle class="dot match" cx="43" cy="120" r="3.4"/>
+            <circle class="node" cx="23" cy="58" r="11"/><circle class="dot" cx="23" cy="58" r="3.4"/>
+          </svg>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>Creators publish</h3>
+            <p>TikTok, Reels and Shorts. Every post has its own promo code and its own link.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>People watch and buy</h3>
+            <p>Views are counted after a check, payment goes through Darebay and the buyer receives the product straight away.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h3>We count and pay</h3>
+            <p>We pay for views as they are counted, and the percentage arrives once an order has outlived the refund window.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO SIDES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Two sides</div>
+        <h2>One platform, two different interests</h2>
+      </div>
+
+      <div class="split-card reveal">
+        <div class="split-half">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/><path d="M9 13a3 3 0 0 0 6 0"/></svg>
+          </div>
+          <div class="eyebrow">For business</div>
+          <h3>A sales channel instead of a batch of clips</h3>
+          <ul class="bullets">
+            <li>Dozens of independent points of sale instead of one account of your own</li>
+            <li>You see which post brought an order and which brought only views</li>
+            <li>You pay for views, for orders or for both results</li>
+          </ul>
+          <a href="#" class="btn btn-fill">See the terms for business
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="split-mid">
+          <span class="split-emblem">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4M3 12v-2a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 12v2a4 4 0 0 1-4 4H3"/></svg>
+          </span>
+        </div>
+
+        <div class="split-half creators">
+          <div class="card-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M12 18v3"/><path d="m10 9 4 2.5L10 14V9Z" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="eyebrow">For creators &amp; traffic partners</div>
+          <h3>Three sources of income from one post</h3>
+          <ul class="bullets">
+            <li>A fixed fee for every accepted clip</li>
+            <li>Payment for counted views</li>
+            <li>A percentage of the sales you brought in, with no cap</li>
+          </ul>
+          <a href="#" class="btn btn-outline">See the terms for creators</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPORT -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Report</div>
+        <h2>Every post is visible</h2>
+        <p class="lead" style="margin-top:12px;">Not a monthly summary, but the path the money took from a specific clip.</p>
+      </div>
+
+      <div class="report-grid">
+        <div class="receipt reveal">
+          <div class="receipt-head">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+              <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+            </svg>
+            <b>DAREBAY</b> <span>· task receipt</span>
+          </div>
+          <div class="receipt-ref">Домер — Нарезки · #TASK-2291</div>
+          <ul class="report-list">
+            <li><span>Posts published</span><span class="val" data-count="42">0</span></li>
+            <li><span>Counted views</span><span class="val" data-count="1280000">0</span></li>
+            <li><span>Clicks</span><span class="val" data-count="9140">0</span></li>
+            <li><span>Paid orders</span><span class="val" data-count="312">0</span></li>
+            <li><span>Refunds</span><span class="val" data-count="11">0</span></li>
+            <li class="money"><span>Net revenue</span><span class="val" data-count="18600" data-prefix="$">$0</span></li>
+          </ul>
+          <div class="receipt-barcode"></div>
+        </div>
+        <div class="report-side">
+          <div class="card kpi-card reveal">
+            <div class="num" data-count="7" data-prefix="$">$0</div>
+            <div class="cap">Cost per buyer</div>
+          </div>
+          <div class="card kpi-card reveal">
+            <div class="num" data-count="4.2" data-suffix="×">0×</div>
+            <div class="cap">Return on spend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMATS -->
+  <section class="section" id="store-section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Formats</div>
+        <h2>What you can sell</h2>
+        <p class="lead" style="margin-top:12px;">A sale means different things for different products, so the tasks differ too.</p>
+      </div>
+
+      <div class="formats-grid">
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 5 3h14l2 6"/><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z"/></svg>
+          </div>
+          <h3>Digital product</h3>
+          <p>A course, a webinar, templates, a guide, access to materials.</p>
+          <div class="foot">We count a paid order that outlived the refund window</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><circle cx="17.5" cy="9" r="2.3"/><path d="M16 20c.2-2.6 2.2-4.6 4.8-4.9"/></svg>
+          </div>
+          <h3>Paid community</h3>
+          <p>A private channel, a club, a subscription to breakdowns.</p>
+          <div class="foot">We count the first payment, the access granted and the renewals</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg>
+          </div>
+          <h3>Mobile app</h3>
+          <p>An app with a subscription.</p>
+          <div class="foot">We count an active paying user, not an install</div>
+        </div>
+        <div class="card format-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+          </div>
+          <h3>Service</h3>
+          <p>A service where the person signs up and pays on their own.</p>
+          <div class="foot">We count a paid invoice</div>
+        </div>
+      </div>
+
+      <div class="card store-card reveal">
+        <div>
+          <div class="eyebrow">Store</div>
+          <h2 style="font-size:clamp(24px,3.4vw,32px);">Products sell in the Darebay store</h2>
+          <p class="lead" style="margin:14px 0 4px;">Every product gets its own page. A buyer arrives from a clip or a promo code, pays on the platform and receives the product right away. The order is tied to the post that brought it.</p>
+          <ul class="bullets">
+            <li>A product page with its own link and promo codes</li>
+            <li>Payment on the platform, delivery right after it</li>
+            <li>Every order shows up in the task report</li>
+          </ul>
+          <a href="#" class="btn btn-fill" style="margin-top:26px;">Open the store
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="store-visual">
+          <div class="mini-card back">
+            <div class="cap">Product page</div>
+            <div class="row"><span>Task</span><span style="color:#fff;">Домер — Нарезки</span></div>
+            <div class="row"><span>Link</span><span style="color:#fff;">darebay.io/d/21</span></div>
+          </div>
+          <div class="mini-card front">
+            <div class="cap">Order</div>
+            <div class="row"><span>Order #4821</span><b>$42.00</b></div>
+            <div class="row"><span>Promo code</span><span style="color:#fff;">DOMER21</span></div>
+            <div class="row"><span>Status</span><span style="color:var(--teal);">Delivered</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFERENCES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Differences</div>
+        <h2>Why this is not the same as ordering clips</h2>
+      </div>
+
+      <div class="diff-grid">
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>
+          </div>
+          <h3>Views and sales in one task</h3>
+          <p>On other platforms, payment for views and an affiliate program are two different products with separate payouts. Here it is one task card, one payout and one report.</p>
+        </div>
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.2-2.2 2.5-2.2s2.5.8 2.5 2c0 2.2-5 1.6-5 4 0 1.2 1.2 2.2 2.5 2.2s2.5-.8 2.5-2.2"/></svg>
+          </div>
+          <h3>We count what we pay for</h3>
+          <p>Views go through a check for artificial inflation, and only an order that was paid for and not refunded counts as a sale. The word "counted" here means "checked".</p>
+        </div>
+        <div class="card diff-card reveal">
+          <div class="card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3>A network proven by sales</h3>
+          <p>Creators are ranked not by follower counts but by paid orders they have actually generated — the ones who don't sell simply don't get new tasks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="closing">
+    <div class="wrap">
+      <div class="closing-panel reveal">
+        <div class="glow glow-teal"></div>
+
+        <div class="closing-topbar">
+          <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M6 3h12v3a6 6 0 0 1-12 0V3Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+              <path d="M6 4H3a1 1 0 0 0-1 1c0 3 2.5 4.6 4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M18 4h3a1 1 0 0 1 1 1c0 3-2.5 4.6-4.6 5" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M12 12v4" stroke="#34e6ad" stroke-width="1.6"/>
+              <path d="M8 20h8" stroke="#34e6ad" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M9 16.5h6l1 3.5H8l1-3.5Z" stroke="#34e6ad" stroke-width="1.6" fill="rgba(52,230,173,0.12)"/>
+            </svg>
+            Darebay
+          </div>
+          <nav class="closing-links">
+            <a href="#tasks-section">Live catalogue</a>
+            <a href="#store-section">Store</a>
+            <a href="#">For business</a>
+            <a href="#">For creators</a>
+          </nav>
+        </div>
+
+        <div class="closing-ghost-wrap">
+          <div class="closing-ghost" aria-hidden="true">DAREBAY</div>
+
+          <span class="closing-pill p1"><b>$1,550</b>&nbsp;paid to creators</span>
+          <span class="closing-pill p2"><b>6</b>&nbsp;tasks open now</span>
+          <span class="closing-pill p3">TikTok · Reels · Shorts</span>
+
+          <div class="closing-headline">
+            <div class="mascot mascot-cta" aria-hidden="true">
+              <svg viewBox="0 0 100 90" width="96" height="86" fill="none">
+                <g class="bob">
+                  <ellipse cx="50" cy="82" rx="20" ry="4" fill="rgba(0,0,0,0.35)"/>
+                  <path d="M20 34 Q4 20 10 6" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle cx="10" cy="6" r="4.5" fill="#1fbf8f"/>
+                  <path d="M80 34 Q97 20 92 6" stroke="#1fbf8f" stroke-width="6" stroke-linecap="round"/>
+                  <circle cx="92" cy="6" r="4.5" fill="#1fbf8f"/>
+                  <rect x="36" y="64" width="28" height="10" rx="3" fill="#0c8a68"/>
+                  <rect x="46" y="56" width="8" height="10" fill="#17a67d"/>
+                  <path d="M28 26h44a4 4 0 0 1 4 4c0 22-12 38-28 38S20 52 20 30a4 4 0 0 1 4-4Z" fill="#34e6ad"/>
+                  <circle cx="40" cy="41" r="3" fill="#04150f"/>
+                  <circle cx="60" cy="41" r="3" fill="#04150f"/>
+                  <path d="M39 49 Q50 58 61 49" stroke="#04150f" stroke-width="3" stroke-linecap="round" fill="none"/>
+                  <path class="spark" d="M12 40l2 5 5 2-5 2-2 5-2-5-5-2 5-2Z" fill="#ffcf6e"/>
+                  <path class="spark" d="M88 46l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5Z" fill="#ffcf6e"/>
+                  <path class="spark" d="M50 4l1.2 3.2L54 8.5l-2.8 1.2L50 13l-1.2-3.3L46 8.5l2.8-1.3Z" fill="#ffcf6e"/>
+                </g>
+              </svg>
+            </div>
+            <h2>Which side are you coming from?</h2>
+            <p class="lead">We sell the product, creators film the clips. Choose your side.</p>
+          </div>
+        </div>
+
+        <div class="final-actions">
+          <a href="#" class="btn btn-fill btn-block">I have a product
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#" class="btn btn-outline btn-block">I want to film and earn</a>
+          <a href="#tasks-section" class="link-arrow">See the open tasks</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fine">Redesign concept · same structure &amp; palette, refreshed visual layer</p>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
+  revealEls.forEach(el=>io.observe(el));
+
+  // count-up numbers
+  function formatNum(n, opts){
+    const decimals = opts.decimals || 0;
+    let s = n.toLocaleString('en-US', { minimumFractionDigits:decimals, maximumFractionDigits:decimals });
+    return (opts.prefix||'') + s + (opts.suffix||'');
+  }
+  const counters = document.querySelectorAll('[data-count]');
+  const cio = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      cio.unobserve(el);
+      const target = parseFloat(el.getAttribute('data-count'));
+      const prefix = el.getAttribute('data-prefix') || '';
+      const suffix = el.getAttribute('data-suffix') || '';
+      const decimals = target % 1 !== 0 ? 1 : 0;
+      const dur = 1100;
+      const start = performance.now();
+      function tick(now){
+        const p = Math.min(1, (now-start)/dur);
+        const eased = 1 - Math.pow(1-p, 3);
+        el.textContent = formatNum(target*eased, {prefix, suffix, decimals});
+        if(p<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }, { threshold:.5 });
+  counters.forEach(el=>cio.observe(el));
+</script>
