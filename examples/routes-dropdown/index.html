@@ -1,26 +1,21 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Выбор маршрута — dropdown с недоступными опциями</title>
+<title>Вибір рейсу — комбобокс з недоступними опціями</title>
 <style>
   :root{
-    --bg: #f6f7fb;
+    --bg: #eef2f4;
     --surface: #ffffff;
-    --border: #e3e6ee;
-    --text: #16181d;
-    --text-muted: #6b7280;
-    --text-faint: #9aa0ac;
-    --accent: #4f46e5;
-    --accent-weak: #eef0fe;
-    --danger: #dc2626;
-    --danger-weak: #fdf1f1;
-    --radius-lg: 14px;
-    --radius-md: 10px;
-    --shadow-panel: 0 12px 32px -8px rgba(16,20,32,0.18), 0 2px 8px rgba(16,20,32,0.06);
-    --shadow-modal: 0 24px 64px -12px rgba(16,20,32,0.35);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    --line: #111111;
+    --line-weak: #d5d9dc;
+    --text: #111111;
+    --text-muted: #8a9099;
+    --text-faint: #b3b8bf;
+    --hover: #eef1f4;
+    --radius: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   }
 
   *{ box-sizing: border-box; }
@@ -29,190 +24,175 @@
     margin: 0;
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     background: var(--bg);
     color: var(--text);
-    padding: 32px 16px;
+    padding: 48px 16px;
   }
 
   .page{
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
   }
 
-  .page-title{
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0 0 4px;
-  }
-  .page-subtitle{
+  .field-group{ margin-bottom: 28px; }
+
+  .field-label{
+    display: block;
     font-size: 13px;
     color: var(--text-muted);
-    margin: 0 0 20px;
+    margin-bottom: 6px;
   }
 
-  /* ---------- Dropdown ---------- */
+  /* ---------- Combobox ---------- */
 
-  .route-select{
+  .combo{
     position: relative;
     width: 100%;
   }
 
-  .route-trigger{
-    width: 100%;
+  .combo-input-row{
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    font-size: 14px;
-    color: var(--text);
-    cursor: pointer;
-    text-align: left;
-    transition: border-color .15s ease, box-shadow .15s ease;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
   }
-  .route-trigger:hover{ border-color: #c7cbe0; }
-  .route-trigger:focus-visible,
-  .route-trigger[aria-expanded="true"]{
+
+  .combo-input{
+    flex: 1;
+    border: none;
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-weak);
+    background: transparent;
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 0;
+    min-width: 0;
   }
+  .combo-input::placeholder{ color: var(--text-faint); font-weight: 400; }
 
-  .trigger-label{ display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .trigger-label .eyebrow{ font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .04em; }
-  .trigger-label .value{ font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .trigger-label .value.placeholder{ color: var(--text-faint); font-weight: 400; }
-
-  .chevron{
+  .combo-arrow{
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 7px solid var(--text);
     flex-shrink: 0;
-    width: 18px; height: 18px;
-    color: var(--text-muted);
+    cursor: pointer;
     transition: transform .15s ease;
   }
-  .route-trigger[aria-expanded="true"] .chevron{ transform: rotate(180deg); }
+  .combo[data-open="true"] .combo-arrow{ transform: rotate(180deg); }
 
-  .route-panel{
+  .combo-panel{
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 4px);
     left: 0;
     right: 0;
     z-index: 20;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-panel);
-    padding: 6px;
-    max-height: 360px;
+    border: 1px solid var(--line-weak);
+    box-shadow: 0 8px 24px rgba(17,17,17,0.10);
+    max-height: 320px;
     overflow-y: auto;
   }
-  .route-panel[hidden]{ display: none; }
+  .combo-panel[hidden]{ display: none; }
 
-  .route-group-label{
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-    padding: 8px 10px 4px;
+  .combo-empty{
+    padding: 16px;
+    font-size: 15px;
+    color: var(--text-muted);
   }
 
-  .route-option{
-    width: 100%;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    background: transparent;
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 10px 10px;
-    text-align: left;
-    cursor: pointer;
-    font: inherit;
-    color: var(--text);
-  }
-  button.route-option:hover{ background: var(--accent-weak); }
-  button.route-option:focus-visible{
-    outline: none;
-    box-shadow: inset 0 0 0 2px var(--accent);
-    background: var(--accent-weak);
-  }
-  .route-option[aria-checked="true"]{ background: var(--accent-weak); }
-
-  .option-check{
-    width: 18px; height: 18px;
-    flex-shrink: 0;
-    margin-top: 1px;
-    color: var(--accent);
-    visibility: hidden;
-  }
-  .route-option[aria-checked="true"] .option-check{ visibility: visible; }
-
-  .option-body{ display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-  .option-name{ font-size: 14px; font-weight: 500; }
-  .option-meta{ font-size: 12px; color: var(--text-muted); }
-
-  /* unavailable option */
-  .route-option.is-disabled{
-    cursor: not-allowed;
-    opacity: .68;
-  }
-  .route-option.is-disabled:hover{ background: transparent; }
-  .route-option.is-disabled .option-name{ color: var(--text-muted); }
-
-  .option-reason{
+  .combo-row{
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 2px;
-    font-size: 12px;
-    color: var(--danger);
-  }
-  .option-reason .dot{
-    width: 4px; height: 4px; border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-  }
-
-  .reason-more{
-    display: inline-block;
-    background: none;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
     border: none;
-    padding: 0;
-    margin: 2px 0 0;
+    background: transparent;
+    text-align: left;
     font: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--accent);
+    font-size: 15px;
+    color: var(--text);
     cursor: pointer;
-    opacity: 1;
-    text-decoration: underline;
-    text-underline-offset: 2px;
   }
-  .reason-more:hover{ color: #3c34b0; }
-  .reason-more:focus-visible{
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: 4px;
+  .combo-row:hover,
+  .combo-row:focus-visible{
+    background: var(--hover);
+    outline: none;
+  }
+  .combo-row[aria-selected="true"]{ background: var(--hover); font-weight: 600; }
+
+  .row-body{ display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .row-name{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-meta{ font-size: 12.5px; color: var(--text-muted); }
+
+  .row-divider{ height: 1px; background: var(--line-weak); margin: 4px 0; }
+
+  .combo-group-label{
+    padding: 10px 16px 4px;
+    font-size: 11px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-faint);
   }
 
-  .route-divider{
-    height: 1px;
-    background: var(--border);
-    margin: 6px 4px;
+  /* unavailable row — whole row is the "learn more" trigger, not a selectable option */
+  .combo-row.is-unavailable{ cursor: pointer; }
+  .combo-row.is-unavailable .row-name{ color: var(--text-muted); }
+  .combo-row.is-unavailable .row-reason{
+    font-size: 12.5px;
+    color: var(--text-faint);
   }
+  .combo-row.is-unavailable:hover .row-reason,
+  .combo-row.is-unavailable:focus-visible .row-reason{ color: var(--text-muted); }
+
+  .info-icon{
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 1px solid var(--text-faint);
+    color: var(--text-faint);
+    font-size: 11px;
+    font-weight: 700;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .combo-row.is-unavailable:hover .info-icon,
+  .combo-row.is-unavailable:focus-visible .info-icon{
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  /* ---------- CTA ---------- */
+
+  .cta{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #111111;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 16px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  .cta:hover{ background: #000; }
+  .cta:focus-visible{ outline: 2px solid #111; outline-offset: 3px; }
 
   /* ---------- Modal ---------- */
 
   .modal-overlay{
     position: fixed;
     inset: 0;
-    background: rgba(15, 17, 26, 0.48);
+    background: rgba(17, 17, 17, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -225,9 +205,7 @@
     width: 100%;
     max-width: 380px;
     background: var(--surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-modal);
-    padding: 22px 22px 18px;
+    padding: 28px 26px 22px;
   }
 
   .modal-header{
@@ -235,243 +213,100 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 4px;
-  }
-
-  .modal-badge{
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--danger-weak);
-    color: var(--danger);
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: .03em;
-    padding: 4px 8px;
-    border-radius: 999px;
-    margin-bottom: 10px;
   }
 
   .modal-title{
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 19px;
+    font-weight: 700;
     margin: 0 0 4px;
   }
-  .modal-route{
+  .modal-route-meta{
     font-size: 13px;
     color: var(--text-muted);
-    margin: 0 0 14px;
+    margin: 0 0 16px;
   }
 
   .modal-close{
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--text-faint);
-    padding: 4px;
-    border-radius: 6px;
+    color: var(--text);
+    padding: 2px;
     line-height: 0;
     flex-shrink: 0;
   }
-  .modal-close:hover{ background: var(--bg); color: var(--text); }
-  .modal-close:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+  .modal-close:focus-visible{ outline: 2px solid var(--text); outline-offset: 2px; }
 
   .modal-body p{
-    font-size: 13.5px;
-    line-height: 1.55;
+    font-size: 14px;
+    line-height: 1.6;
     color: var(--text);
-    margin: 0 0 12px;
+    margin: 0 0 18px;
   }
 
   .modal-facts{
     list-style: none;
-    margin: 0 0 16px;
-    padding: 0;
+    margin: 0 0 22px;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--line-weak);
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    background: var(--bg);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
+    gap: 10px;
   }
   .modal-facts li{
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    font-size: 12.5px;
+    font-size: 13px;
   }
   .modal-facts .fact-label{ color: var(--text-muted); }
-  .modal-facts .fact-value{ font-weight: 500; text-align: right; }
+  .modal-facts .fact-value{ font-weight: 600; text-align: right; }
 
-  .modal-actions{
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-
-  .btn{
-    font: inherit;
-    font-size: 13.5px;
-    font-weight: 600;
-    padding: 9px 16px;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    border: 1px solid transparent;
-  }
-  .btn-primary{
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-primary:hover{ background: #4338ca; }
-  .btn-primary:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  .sr-only{
-    position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
-  }
+  .modal-actions{ display: flex; }
+  .modal-actions .cta{ width: 100%; margin-top: 0; padding: 14px 0; }
 </style>
 </head>
 <body>
 
 <div class="page">
-  <p class="page-title">Маршрут</p>
-  <p class="page-subtitle">Недоступные направления затемнены и не выбираются — у каждого указана краткая причина и ссылка «Подробнее».</p>
 
-  <div class="route-select">
-    <button
-      type="button"
-      id="routeTrigger"
-      class="route-trigger"
-      aria-haspopup="true"
-      aria-expanded="false"
-      aria-controls="routePanel"
-    >
-      <span class="trigger-label">
-        <span class="eyebrow">Маршрут</span>
-        <span class="value placeholder" id="routeTriggerValue">Выберите маршрут</span>
-      </span>
-      <svg class="chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-
-    <div id="routePanel" class="route-panel" role="menu" aria-label="Список маршрутов" hidden>
-
-      <p class="route-group-label">Доступно</p>
-
-      <button type="button" class="route-option" role="menuitemradio" aria-checked="false"
-        data-route-id="spb-vyborg" data-route-name="Санкт-Петербург → Выборг" data-route-meta="Ежедневно · 09:00">
-        <svg class="option-check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="option-body">
-          <span class="option-name">Санкт-Петербург → Выборг</span>
-          <span class="option-meta">Ежедневно · отправление 09:00</span>
-        </span>
-      </button>
-
-      <button type="button" class="route-option" role="menuitemradio" aria-checked="false"
-        data-route-id="msk-kazan" data-route-name="Москва → Казань" data-route-meta="Пн, Ср, Пт · 21:30">
-        <svg class="option-check" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span class="option-body">
-          <span class="option-name">Москва → Казань</span>
-          <span class="option-meta">Пн, Ср, Пт · отправление 21:30</span>
-        </span>
-      </button>
-
-      <div class="route-divider" role="separator"></div>
-      <p class="route-group-label">Недоступно</p>
-
-      <div class="route-option is-disabled">
-        <svg class="option-check" viewBox="0 0 20 20" fill="none" aria-hidden="true"></svg>
-        <span class="option-body">
-          <span class="option-name">Москва → Сочи</span>
-          <span class="option-meta">Ежедневно · отправление 07:15</span>
-          <span class="option-reason">
-            <span class="dot" aria-hidden="true"></span>
-            Недоступно: другой заезд
-          </span>
-          <button type="button" class="reason-more"
-            aria-label="Маршрут Москва → Сочи недоступен: другой заезд. Подробнее о причине"
-            data-title="Москва → Сочи"
-            data-meta="Ежедневно · отправление 07:15"
-            data-reason="Другой заезд"
-            data-details="Все места на этот маршрут закреплены за другой группой заезда (бронь №4821, заезд 12–19 августа). Маршрут вновь откроется для самостоятельного бронирования после завершения текущего заезда."
-            data-until="19 августа, 00:00"
-            data-status="Занято другой группой"
-            aria-haspopup="dialog">
-            Подробнее
-          </button>
-        </span>
+  <div class="field-group">
+    <label class="field-label" for="routeInput">Рейс</label>
+    <div class="combo" id="routeCombo" data-open="false">
+      <div class="combo-input-row">
+        <input
+          type="text"
+          id="routeInput"
+          class="combo-input"
+          role="combobox"
+          aria-expanded="false"
+          aria-controls="routePanel"
+          aria-autocomplete="list"
+          autocomplete="off"
+          placeholder="Оберіть рейс"
+        >
+        <span class="combo-arrow" id="routeArrow" aria-hidden="true"></span>
       </div>
 
-      <div class="route-option is-disabled">
-        <svg class="option-check" viewBox="0 0 20 20" fill="none" aria-hidden="true"></svg>
-        <span class="option-body">
-          <span class="option-name">Санкт-Петербург → Хельсинки</span>
-          <span class="option-meta">Вт, Чт, Сб · отправление 06:40</span>
-          <span class="option-reason">
-            <span class="dot" aria-hidden="true"></span>
-            Недоступно: тех. обслуживание
-          </span>
-          <button type="button" class="reason-more"
-            aria-label="Маршрут Санкт-Петербург → Хельсинки недоступен: техническое обслуживание. Подробнее о причине"
-            data-title="Санкт-Петербург → Хельсинки"
-            data-meta="Вт, Чт, Сб · отправление 06:40"
-            data-reason="Плановое техническое обслуживание"
-            data-details="Транспорт на этом маршруте проходит плановое техническое обслуживание. Бронирование возобновится автоматически, как только маршрут пройдёт проверку и вернётся в расписание."
-            data-until="16 августа, 12:00"
-            data-status="На обслуживании"
-            aria-haspopup="dialog">
-            Подробнее
-          </button>
-        </span>
+      <div class="combo-panel" id="routePanel" role="listbox" aria-label="Список рейсів" hidden>
+        <div class="combo-empty" id="routeEmpty" hidden>Нічого не знайдено</div>
+        <div id="routeItems"></div>
       </div>
-
-      <div class="route-option is-disabled">
-        <svg class="option-check" viewBox="0 0 20 20" fill="none" aria-hidden="true"></svg>
-        <span class="option-body">
-          <span class="option-name">Москва → Санкт-Петербург (ночной)</span>
-          <span class="option-meta">Ежедневно · отправление 23:50</span>
-          <span class="option-reason">
-            <span class="dot" aria-hidden="true"></span>
-            Недоступно: сезон закрыт
-          </span>
-          <button type="button" class="reason-more"
-            aria-label="Маршрут Москва → Санкт-Петербург (ночной) недоступен: сезонный перерыв. Подробнее о причине"
-            data-title="Москва → Санкт-Петербург (ночной)"
-            data-meta="Ежедневно · отправление 23:50"
-            data-reason="Сезонный перерыв"
-            data-details="Ночной рейс не выполняется в текущем сезоне из-за низкого спроса в это время года. Ориентировочная дата возобновления — начало октября, ближе к дате расписание будет обновлено."
-            data-until="ориентировочно 1 октября"
-            data-status="Сезонный перерыв"
-            aria-haspopup="dialog">
-            Подробнее
-          </button>
-        </span>
-      </div>
-
     </div>
   </div>
+
+  <button type="button" class="cta">Продовжити</button>
+
 </div>
 
 <div class="modal-overlay" id="routeModalOverlay" hidden>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="routeModal">
     <div class="modal-header">
       <div>
-        <span class="modal-badge" id="modalBadge">Недоступно</span>
-        <h2 class="modal-title" id="modalTitle">Причина недоступности</h2>
-        <p class="modal-route" id="modalRouteMeta"></p>
+        <h2 class="modal-title" id="modalTitle">Причина недоступності</h2>
+        <p class="modal-route-meta" id="modalRouteMeta"></p>
       </div>
-      <button type="button" class="modal-close" id="modalClose" aria-label="Закрыть">
+      <button type="button" class="modal-close" id="modalClose" aria-label="Закрити">
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
         </svg>
@@ -481,20 +316,40 @@
       <p id="modalDetails"></p>
       <ul class="modal-facts">
         <li><span class="fact-label">Статус</span><span class="fact-value" id="modalStatus"></span></li>
-        <li><span class="fact-label">Ожидаемое возобновление</span><span class="fact-value" id="modalUntil"></span></li>
+        <li><span class="fact-label">Очікуване відновлення</span><span class="fact-value" id="modalUntil"></span></li>
       </ul>
     </div>
     <div class="modal-actions">
-      <button type="button" class="btn btn-primary" id="modalOk">Понятно</button>
+      <button type="button" class="cta" id="modalOk">Зрозуміло</button>
     </div>
   </div>
 </div>
 
 <script>
 (function () {
-  var trigger = document.getElementById('routeTrigger');
-  var triggerValue = document.getElementById('routeTriggerValue');
+  var routes = [
+    { id: 'bc-vienna', name: 'Біла Церква-Відень DE0051', meta: 'Щодня · відправлення 21:00', available: true },
+    { id: 'od-munich', name: 'Одеса-Мюнхен DE00115', meta: 'Пн, Ср, Пт · відправлення 18:30', available: true },
+    { id: 'kv-berlin', name: 'Київ-Берлін DE0073', meta: 'Щодня · відправлення 07:15', available: false,
+      reason: 'Недоступно: інший заїзд',
+      details: 'Усі місця на цей рейс закріплені за іншою групою заїзду (бронь №4821, заїзд 12–19 серпня). Рейс знову відкриється для самостійного бронювання після завершення поточного заїзду.',
+      status: 'Заброньовано іншою групою', until: '19 серпня, 00:00' },
+    { id: 'lv-krakow', name: 'Львів-Краків DE0032', meta: 'Вт, Чт, Сб · відправлення 06:40', available: false,
+      reason: 'Недоступно: технічне обслуговування',
+      details: 'Транспорт на цьому рейсі проходить планове технічне обслуговування. Бронювання відновиться автоматично, щойно рейс пройде перевірку і повернеться до розкладу.',
+      status: 'На обслуговуванні', until: '16 серпня, 12:00' },
+    { id: 'od-warsaw', name: 'Одеса-Варшава DE0098', meta: 'Щодня · відправлення 23:50', available: false,
+      reason: 'Недоступно: сезон закрито',
+      details: 'Рейс не виконується у поточному сезоні через низький попит у цей час року. Орієнтовна дата відновлення — початок жовтня, ближче до дати розклад буде оновлено.',
+      status: 'Сезонна перерва', until: 'орієнтовно 1 жовтня' }
+  ];
+
+  var combo = document.getElementById('routeCombo');
+  var input = document.getElementById('routeInput');
+  var arrow = document.getElementById('routeArrow');
   var panel = document.getElementById('routePanel');
+  var empty = document.getElementById('routeEmpty');
+  var itemsHost = document.getElementById('routeItems');
 
   var modalOverlay = document.getElementById('routeModalOverlay');
   var modalTitle = document.getElementById('modalTitle');
@@ -505,6 +360,7 @@
   var modalClose = document.getElementById('modalClose');
   var modalOk = document.getElementById('modalOk');
 
+  var selectedId = null;
   var lastFocusedBeforeModal = null;
 
   function isPanelOpen() { return !panel.hidden; }
@@ -512,135 +368,177 @@
 
   function openPanel() {
     panel.hidden = false;
-    trigger.setAttribute('aria-expanded', 'true');
+    combo.setAttribute('data-open', 'true');
+    input.setAttribute('aria-expanded', 'true');
+    render(input.value);
   }
 
-  function closePanel(returnFocus) {
+  function closePanel() {
     panel.hidden = true;
-    trigger.setAttribute('aria-expanded', 'false');
-    if (returnFocus) trigger.focus();
+    combo.setAttribute('data-open', 'false');
+    input.setAttribute('aria-expanded', 'false');
   }
 
-  function togglePanel() {
-    if (isPanelOpen()) closePanel(true);
-    else openPanel();
+  function matches(route, query) {
+    return route.name.toLowerCase().indexOf(query.trim().toLowerCase()) !== -1;
   }
 
-  trigger.addEventListener('click', togglePanel);
+  function render(query) {
+    var list = routes.filter(function (r) { return matches(r, query); });
+    itemsHost.innerHTML = '';
 
-  trigger.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      openPanel();
-      var first = panel.querySelector('.route-option:not(.is-disabled)');
-      if (first) first.focus();
+    if (list.length === 0) {
+      empty.hidden = false;
+      return;
     }
-  });
+    empty.hidden = true;
 
-  // Select an available route
-  panel.querySelectorAll('button.route-option').forEach(function (opt) {
-    opt.addEventListener('click', function () {
-      panel.querySelectorAll('button.route-option').forEach(function (o) {
-        o.setAttribute('aria-checked', 'false');
-      });
-      opt.setAttribute('aria-checked', 'true');
-      triggerValue.textContent = opt.getAttribute('data-route-name');
-      triggerValue.classList.remove('placeholder');
-      closePanel(true);
+    var available = list.filter(function (r) { return r.available; });
+    var unavailable = list.filter(function (r) { return !r.available; });
+
+    available.forEach(function (route) {
+      itemsHost.appendChild(buildAvailableRow(route));
     });
-  });
 
-  // Arrow-key navigation between focusable items inside the panel
-  // (available options + "Подробнее" buttons on disabled ones)
-  function focusableItems() {
-    return Array.prototype.slice.call(
-      panel.querySelectorAll('button.route-option, .reason-more')
-    );
+    if (available.length && unavailable.length) {
+      var divider = document.createElement('div');
+      divider.className = 'row-divider';
+      itemsHost.appendChild(divider);
+    }
+
+    unavailable.forEach(function (route) {
+      itemsHost.appendChild(buildUnavailableRow(route));
+    });
   }
 
-  panel.addEventListener('keydown', function (e) {
-    var items = focusableItems();
-    var currentIndex = items.indexOf(document.activeElement);
+  function buildAvailableRow(route) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'combo-row';
+    btn.setAttribute('role', 'option');
+    btn.setAttribute('aria-selected', String(route.id === selectedId));
 
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      var next = items[currentIndex + 1] || items[0];
-      next.focus();
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      var prev = items[currentIndex - 1] || items[items.length - 1];
-      prev.focus();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      closePanel(true);
-    } else if (e.key === 'Tab') {
-      // let Tab escape the panel naturally, but close it once focus leaves
-      window.setTimeout(function () {
-        if (!panel.contains(document.activeElement) && document.activeElement !== trigger) {
-          closePanel(false);
-        }
-      }, 0);
-    }
-  });
+    var body = document.createElement('span');
+    body.className = 'row-body';
+    body.innerHTML =
+      '<span class="row-name">' + route.name + '</span>' +
+      '<span class="row-meta">' + route.meta + '</span>';
+    btn.appendChild(body);
 
-  // Click outside closes the panel (ignored while the modal owns focus)
-  document.addEventListener('click', function (e) {
-    if (isModalOpen()) return;
-    if (!isPanelOpen()) return;
-    var target = e.target;
-    if (trigger.contains(target) || panel.contains(target)) return;
-    closePanel(false);
-  });
-
-  // "Подробнее" -> open modal with the full reason
-  panel.querySelectorAll('.reason-more').forEach(function (btn) {
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      lastFocusedBeforeModal = btn;
-      modalTitle.textContent = btn.getAttribute('data-title');
-      modalRouteMeta.textContent = btn.getAttribute('data-meta');
-      modalDetails.textContent = btn.getAttribute('data-details');
-      modalStatus.textContent = btn.getAttribute('data-status');
-      modalUntil.textContent = btn.getAttribute('data-until');
-      modalOverlay.hidden = false;
-      modalClose.focus();
+    btn.addEventListener('click', function () {
+      selectedId = route.id;
+      input.value = route.name;
+      closePanel();
     });
-  });
+
+    return btn;
+  }
+
+  function buildUnavailableRow(route) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'combo-row is-unavailable';
+    btn.setAttribute('aria-label', route.name + ' — недоступно. ' + route.reason + '. Натисніть, щоб дізнатися більше');
+
+    var body = document.createElement('span');
+    body.className = 'row-body';
+    body.innerHTML =
+      '<span class="row-name">' + route.name + '</span>' +
+      '<span class="row-reason">' + route.reason + '</span>';
+    btn.appendChild(body);
+
+    var icon = document.createElement('span');
+    icon.className = 'info-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = 'i';
+    btn.appendChild(icon);
+
+    btn.addEventListener('click', function () {
+      openReasonModal(route, btn);
+    });
+
+    return btn;
+  }
+
+  function openReasonModal(route, triggerEl) {
+    lastFocusedBeforeModal = triggerEl;
+    modalTitle.textContent = route.name;
+    modalRouteMeta.textContent = route.meta;
+    modalDetails.textContent = route.details;
+    modalStatus.textContent = route.status;
+    modalUntil.textContent = route.until;
+    modalOverlay.hidden = false;
+    modalClose.focus();
+  }
 
   function closeModal() {
     modalOverlay.hidden = true;
     if (lastFocusedBeforeModal) lastFocusedBeforeModal.focus();
   }
 
+  input.addEventListener('focus', openPanel);
+  input.addEventListener('input', function () { render(input.value); openPanel(); });
+
+  arrow.addEventListener('click', function () {
+    if (isPanelOpen()) closePanel(); else { input.focus(); openPanel(); }
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      openPanel();
+      var first = panel.querySelector('.combo-row');
+      if (first) first.focus();
+    } else if (e.key === 'Escape') {
+      closePanel();
+    }
+  });
+
+  panel.addEventListener('keydown', function (e) {
+    var items = Array.prototype.slice.call(panel.querySelectorAll('.combo-row'));
+    var idx = items.indexOf(document.activeElement);
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      (items[idx + 1] || items[0]).focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (idx <= 0) input.focus(); else items[idx - 1].focus();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      closePanel();
+      input.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (isModalOpen()) return;
+    if (!isPanelOpen()) return;
+    if (combo.contains(e.target)) return;
+    closePanel();
+  });
+
   modalClose.addEventListener('click', closeModal);
   modalOk.addEventListener('click', closeModal);
-
   modalOverlay.addEventListener('click', function (e) {
     if (e.target === modalOverlay) closeModal();
   });
-
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    if (isModalOpen()) {
+    if (e.key === 'Escape' && isModalOpen()) {
       e.stopPropagation();
       closeModal();
     }
   });
-
-  // basic focus trap inside the modal
   modalOverlay.addEventListener('keydown', function (e) {
     if (e.key !== 'Tab') return;
     var focusable = modalOverlay.querySelectorAll('button');
     var first = focusable[0];
     var last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
+
+  render('');
 })();
 </script>
 
